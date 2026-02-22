@@ -114,7 +114,8 @@ const Chatbot = () => {
         const history = messages.slice(1).map(m => ({ role: m.role, content: m.content }));
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/chatbot', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const { data } = await axios.post(`${apiUrl}/api/chatbot`, {
                 message: question,
                 history
             });

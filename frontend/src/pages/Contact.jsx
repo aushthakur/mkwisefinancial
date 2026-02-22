@@ -35,7 +35,8 @@ const Contact = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/contact', submissionData);
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const response = await axios.post(`${apiUrl}/api/contact`, submissionData);
 
             if (response.status === 201) {
                 setStatus({ type: 'success', message: 'Thank you! Your request for a call back has been received.' });

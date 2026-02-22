@@ -54,7 +54,8 @@ const GetStartedModal = ({ isOpen, onClose }) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post('http://localhost:5000/api/contact', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            await axios.post(`${apiUrl}/api/contact`, {
                 ...formData,
                 message: `Multi-step Lead: Interested in ${formData.service} (${formData.category})`
             });
