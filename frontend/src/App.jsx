@@ -9,6 +9,8 @@ import MortgageOverview from './pages/MortgageOverview';
 import ProtectionOverview from './pages/ProtectionOverview';
 import { serviceData } from './utils/serviceData';
 
+import axios from 'axios';
+
 const ServiceWrapper = ({ id }) => {
   const data = serviceData[id];
   if (!data) return <div>Service not found</div>;
@@ -16,6 +18,14 @@ const ServiceWrapper = ({ id }) => {
 };
 
 function App() {
+  React.useEffect(() => {
+    // Warm up the backend (mitigate Render's cold start)
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    axios.get(apiUrl).catch(() => {
+      // Ignore errors, we just want to trigger the wake-up
+    });
+  }, []);
+
   return (
     <Router>
       <Layout>
