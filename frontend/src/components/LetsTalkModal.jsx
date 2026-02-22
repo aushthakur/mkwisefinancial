@@ -31,7 +31,7 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
                 <div className="p-8 space-y-4">
                     {/* Call Now */}
                     <a
-                        href="tel:+4402078460000"
+                        href="tel:+442079460000"
                         className="flex items-center justify-between p-6 bg-white border border-gray-100 rounded-xl group transition-all hover:shadow-xl hover:border-primary/20"
                     >
                         <div className="flex items-center gap-5">
@@ -48,7 +48,7 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
 
                     {/* WhatsApp */}
                     <a
-                        href="https://wa.me/4402078460000"
+                        href="https://wa.me/442079460000"
                         className="flex items-center justify-between p-6 bg-white border border-gray-100 rounded-xl group transition-all hover:shadow-xl hover:border-primary/20"
                     >
                         <div className="flex items-center gap-5">

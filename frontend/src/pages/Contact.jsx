@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { CheckCircle, ArrowLeft } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import logo from '../assets/logo.png';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -33,12 +35,23 @@ const Contact = () => {
         };
 
         try {
-            await axios.post('http://localhost:5000/api/contact', submissionData);
-            setStatus({ type: 'success', message: 'Thank you! Your request for a call back has been received.' });
-            setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+            const response = await axios.post('http://localhost:5000/api/contact', submissionData);
+
+            if (response.status === 201) {
+                setStatus({ type: 'success', message: 'Thank you! Your request for a call back has been received.' });
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    message: ''
+                });
+            } else {
+                throw new Error('Unexpected response status');
+            }
         } catch (error) {
             console.error('Submission error:', error);
-            setStatus({ type: 'error', message: 'Oops! Something went wrong. Please try again.' });
+            setStatus({ type: 'error', message: 'Connection to advisor failed. Please check your internet or try again later.' });
         } finally {
             setLoading(false);
         }
@@ -46,13 +59,14 @@ const Contact = () => {
 
     return (
         <div className="min-h-screen bg-[#f8f9fb] font-display flex flex-col">
+            <Helmet>
+                <title>Contact Mkwise Financial | Expert Mortgage & Protection Advice</title>
+                <meta name="description" content="Speak to a qualified Mkwise Financial advisor today. Free, no-obligation mortgage and protection advice tailored to your goals." />
+            </Helmet>
             {/* Minimal Header */}
             <nav className="px-6 py-6 flex justify-between items-center bg-white border-b border-gray-100">
                 <Link to="/" className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-primary flex items-center justify-center rounded-[2px]">
-                        <span className="text-white font-bold text-lg">M</span>
-                    </div>
-                    <span className="text-lg font-bold tracking-tight text-primary">MKWISE FINANCIAL</span>
+                    <img src={logo} alt="Mkwise Financial Logo" className="h-10 w-auto" />
                 </Link>
                 <Link to="/" className="text-sm font-medium text-slate-600 hover:text-primary flex items-center gap-1">
                     <ArrowLeft size={16} /> Back to Home
@@ -150,7 +164,7 @@ const Contact = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-primary text-white py-4 rounded-md font-bold text-sm tracking-wide hover:bg-blue-800 transition-all flex items-center justify-center gap-2 uppercase disabled:opacity-50 cursor-pointer"
+                            className="w-full bg-primary text-white py-4 rounded-md font-bold text-sm tracking-wide hover:bg-blue-800 transition-all flex items-center justify-center gap-2 uppercase disabled:opacity-50 cursor-pointer active:scale-95 touch-manipulation"
                         >
                             {loading ? 'Sending...' : (
                                 <>
@@ -182,10 +196,10 @@ const Contact = () => {
 
                 {/* Sub-footer Legal */}
                 <div className="max-w-3xl w-full mt-24 text-center">
-                    <div className="flex justify-center gap-6 mb-8">
-                        <a href="#" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Privacy Policy</a>
-                        <a href="#" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Cookie Policy</a>
-                        <a href="#" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Terms of Business</a>
+                    <div className="flex justify-center gap-6 mb-8 flex-wrap">
+                        <Link to="/contact" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Privacy Policy</Link>
+                        <Link to="/contact" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Cookie Policy</Link>
+                        <Link to="/contact" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Terms of Business</Link>
                     </div>
                     <p className="text-[10px] text-slate-400 leading-relaxed mb-8">
                         Mkwise Financial is authorised and regulated by the Financial Conduct Authority (FCA). Our registration can be verified on the Financial Services Register under reference number [Placeholder].

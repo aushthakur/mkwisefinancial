@@ -1,16 +1,37 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import LetsTalkModal from '../components/LetsTalkModal';
+import { Helmet } from 'react-helmet-async';
+import { useModals } from '../context/ModalContext';
 
 const Home = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { openGetStarted, openLetsTalk } = useModals();
 
     return (
         <div className="font-display bg-white min-h-screen">
-            <LetsTalkModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <Helmet>
+                <title>Mkwise Financial | Expert Mortgage & Protection Advice</title>
+                <meta name="description" content="Expert UK mortgage and protection advice. From first-time buyers to remortgaging and life insurance, Mkwise Financial finds you the best deals." />
+            </Helmet>
             {/* Hero Section */}
-            <header className="relative pt-20 pb-32 overflow-hidden bg-white">
+            <header className="relative pt-32 pb-48 overflow-hidden bg-slate-900">
+                {/* Background Video */}
+                <div className="absolute inset-0 z-0">
+                    <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover opacity-60"
+                        poster="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000"
+                    >
+                        <source src="/videos/hero-bg.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    {/* Overlay for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
+                </div>
+
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-left">
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -19,38 +40,32 @@ const Home = () => {
                         transition={{ duration: 0.8 }}
                         className="max-w-3xl"
                     >
-                        <span className="inline-block py-1.5 px-4 rounded-full bg-blue-50 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-primary/10">
+                        <span className="inline-block py-1.5 px-4 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-blue-400/20">
                             FCA Regulated Advisory
                         </span>
-                        <h1 className="text-5xl lg:text-[5.5rem] font-black text-slate-900 leading-[1.05] mb-10 tracking-tight">
+                        <h1 className="text-5xl lg:text-[5.5rem] font-black text-white leading-[1.05] mb-10 tracking-tight">
                             Expert Mortgage & <br />
-                            <span className="text-primary">Protection Advice</span> – <br />
+                            <span className="text-blue-400">Protection Advice</span> <br />
                             Tailored to You
                         </h1>
-                        <p className="text-xl text-slate-500 mb-12 leading-relaxed max-w-2xl font-medium">
+                        <p className="text-xl text-slate-300 mb-12 leading-relaxed max-w-2xl font-medium">
                             Navigating the UK market to find your perfect home loan and total financial security. We search the whole of market to find the best rates for your unique circumstances.
                         </p>
                         <div className="flex flex-wrap gap-4">
-                            <Link to="/contact" className="bg-primary hover:bg-blue-800 text-white px-10 py-5 rounded-sm font-bold transition-all shadow-xl shadow-blue-500/20 uppercase tracking-widest text-xs">
-                                Get Free Advice
-                            </Link>
                             <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="border border-primary text-primary px-10 py-5 rounded-sm font-bold hover:bg-primary/5 transition-all uppercase tracking-widest text-xs"
+                                onClick={openGetStarted}
+                                className="bg-primary hover:bg-blue-700 text-white px-10 py-5 rounded-sm font-bold transition-all shadow-xl shadow-blue-500/20 uppercase tracking-widest text-xs"
+                            >
+                                Get Free Advice
+                            </button>
+                            <button
+                                onClick={openLetsTalk}
+                                className="border border-white/30 text-white px-10 py-5 rounded-sm font-bold hover:bg-white/10 transition-all uppercase tracking-widest text-xs"
                             >
                                 Let's Talk
                             </button>
                         </div>
                     </motion.div>
-                </div>
-                {/* Decorative Background Element */}
-                <div className="absolute top-0 right-0 -z-10 w-5/12 h-full opacity-40 translate-x-1/4 select-none">
-                    <img
-                        alt="Modern architectural building"
-                        className="w-full h-full object-cover rounded-l-[100px]"
-                        src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent"></div>
                 </div>
             </header>
 
@@ -60,28 +75,27 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
                         <div className="flex items-center gap-6 group">
                             <div className="w-14 h-14 rounded-sm bg-blue-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
-                                <span className="material-icons text-2xl">verified_user</span>
                             </div>
                             <div>
-                                <p className="font-black text-slate-900 uppercase tracking-tight">FCA Regulated</p>
+                                <h3 className="font-black text-slate-900 uppercase tracking-tight">FCA Regulated</h3>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Authorized Advisors</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-6 group">
                             <div className="w-14 h-14 rounded-sm bg-blue-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
-                                <span className="material-icons text-2xl">account_balance</span>
+                                <span className="material-icons text-2xl" aria-hidden="true">account_balance</span>
                             </div>
                             <div>
-                                <p className="font-black text-slate-900 uppercase tracking-tight">150+ UK Lenders</p>
+                                <h3 className="font-black text-slate-900 uppercase tracking-tight">150+ UK Lenders</h3>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Extensive Panel Access</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-6 group">
                             <div className="w-14 h-14 rounded-sm bg-blue-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
-                                <span className="material-icons text-2xl">public</span>
+                                <span className="material-icons text-2xl" aria-hidden="true">public</span>
                             </div>
                             <div>
-                                <p className="font-black text-slate-900 uppercase tracking-tight">Whole of Market</p>
+                                <h3 className="font-black text-slate-900 uppercase tracking-tight">Whole of Market</h3>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Unbiased Selection</p>
                             </div>
                         </div>

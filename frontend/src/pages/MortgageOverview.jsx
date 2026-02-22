@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useModals } from '../context/ModalContext';
 import { Key, RotateCcw, Building2, Users, AlertCircle, TrendingUp, Handshake, Landmark, Coins } from 'lucide-react';
 
 const mortgageSolutions = [
@@ -44,25 +45,30 @@ const mortgageSolutions = [
         title: 'Interest-Only',
         description: 'Guidance on interest-only products and repayment strategies for qualifying borrowers.',
         icon: <TrendingUp size={24} />,
-        path: '#'
+        path: '/contact'
     },
     {
         title: 'Commercial',
         description: 'Financing for business premises and commercial investments. Specialized lending for professional growth.',
         icon: <Building2 size={24} />,
-        path: '#'
+        path: '/contact'
     },
     {
         title: 'Equity Release',
         description: 'Unlock the value in your home for later-life planning. Specialist advice for those aged 55 and over.',
         icon: <Coins size={24} />,
-        path: '#'
+        path: '/contact'
     }
 ];
 
 const MortgageOverview = () => {
+    const { openGetStarted } = useModals();
     return (
         <div className="font-display bg-white min-h-screen">
+            <Helmet>
+                <title>Mortgage Solutions | Mkwise Financial Advice</title>
+                <meta name="description" content="Discover unbiased, whole-of-market mortgage solutions. From first-time buyers to equity release, Mkwise Financial finds you the best deals." />
+            </Helmet>
             <header className="py-32 bg-white text-center">
                 <div className="max-w-4xl mx-auto px-6">
                     <span className="inline-block py-1.5 px-4 rounded-full bg-blue-50 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-primary/10">
@@ -97,12 +103,12 @@ const MortgageOverview = () => {
                                 <p className="text-sm text-slate-500 leading-relaxed mb-10 flex-grow font-medium">
                                     {solution.description}
                                 </p>
-                                <Link
-                                    to={solution.path}
+                                <button
+                                    onClick={openGetStarted}
                                     className="w-full py-4 border border-gray-200 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 hover:bg-primary hover:text-white hover:border-primary transition-all rounded-sm flex items-center justify-center gap-2"
                                 >
                                     Speak to an Adviser <span className="material-icons text-sm">east</span>
-                                </Link>
+                                </button>
                             </motion.div>
                         ))}
                     </div>
@@ -119,11 +125,14 @@ const MortgageOverview = () => {
                     <div className="flex flex-wrap gap-4 justify-center">
                         <div className="bg-white text-primary px-8 py-3 rounded-sm font-bold flex items-center gap-3">
                             <span className="material-icons">phone</span>
-                            Call 0800 123 4567
+                            Call 020 7946 0000
                         </div>
-                        <Link to="/contact" className="border border-white/30 text-white px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all uppercase tracking-widest text-xs">
+                        <button
+                            onClick={openGetStarted}
+                            className="border border-white/30 text-white px-8 py-3 rounded-sm font-bold hover:bg-white/10 transition-all uppercase tracking-widest text-xs"
+                        >
                             Request Callback
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </section>

@@ -1,10 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import { useModals } from '../context/ModalContext';
 
 const ServiceDetail = ({ title, description, benefits, detailContent, image, serviceType }) => {
+    const { openGetStarted } = useModals();
     return (
         <div className="font-display">
+            <Helmet>
+                <title>{title} | Mkwise Financial</title>
+                <meta name="description" content={description} />
+                <meta property="og:title" content={`${title} | Mkwise Financial`} />
+                <meta property="og:description" content={description} />
+            </Helmet>
             {/* Hero Section */}
             <section className="relative pt-20 pb-24 overflow-hidden bg-slate-900 text-white">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -18,12 +27,12 @@ const ServiceDetail = ({ title, description, benefits, detailContent, image, ser
                         <p className="text-lg text-slate-300 mb-10 leading-relaxed max-w-2xl">
                             {description}
                         </p>
-                        <Link
-                            to="/contact"
+                        <button
+                            onClick={openGetStarted}
                             className="bg-primary hover:bg-blue-700 text-white px-8 py-4 rounded font-semibold transition-all inline-flex items-center gap-2"
                         >
                             Get Expert Advice <ArrowRight size={18} />
-                        </Link>
+                        </button>
                     </div>
                 </div>
 
@@ -78,12 +87,12 @@ const ServiceDetail = ({ title, description, benefits, detailContent, image, ser
                                             <p className="text-white font-bold">0800 123 4567</p>
                                         </div>
                                     </div>
-                                    <Link
-                                        to="/contact"
+                                    <button
+                                        onClick={openGetStarted}
                                         className="w-full bg-primary hover:bg-blue-700 text-white py-4 rounded-lg font-bold text-center block transition-all"
                                     >
                                         Request a Call Back
-                                    </Link>
+                                    </button>
                                 </div>
 
                                 <div className="mt-8 pt-8 border-t border-white/10">

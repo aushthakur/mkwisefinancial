@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useModals } from '../context/ModalContext';
 import { Shield, Heart, Activity, Wallet, Home, Umbrella, Briefcase, Info } from 'lucide-react';
 
 const protectionSolutions = [
@@ -23,8 +24,13 @@ const protectionSolutions = [
 ];
 
 const ProtectionOverview = () => {
+    const { openGetStarted } = useModals();
     return (
         <div className="font-display bg-white min-h-screen">
+            <Helmet>
+                <title>Protection Solutions | Mkwise Financial Advice</title>
+                <meta name="description" content="Secure your financial resilience with expert life protection advice. From life insurance to critical illness, we help you protect what matters most." />
+            </Helmet>
             {/* Hero Section */}
             <header className="relative py-32 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row items-center gap-20">
@@ -41,11 +47,17 @@ const ProtectionOverview = () => {
                             We provide expert, independent protection advice tailored to your mortgage and lifestyle. Our goal is to ensure that whatever happens, your home and loved ones remain secure.
                         </p>
                         <div className="flex flex-wrap gap-4">
-                            <Link to="/contact" className="bg-primary text-white px-10 py-5 rounded-sm font-bold hover:bg-blue-800 transition-all shadow-2xl shadow-blue-500/30 uppercase tracking-widest text-xs">
+                            <button
+                                onClick={openGetStarted}
+                                className="bg-primary text-white px-10 py-5 rounded-sm font-bold hover:bg-blue-800 transition-all shadow-2xl shadow-blue-500/30 uppercase tracking-widest text-xs"
+                            >
                                 Get Free Expert Advice
-                            </Link>
-                            <button className="border border-slate-200 text-slate-600 px-10 py-5 rounded-sm font-bold hover:bg-slate-50 transition-all text-xs uppercase tracking-widest">
-                                Our Providers
+                            </button>
+                            <button
+                                onClick={openGetStarted}
+                                className="border border-slate-200 text-slate-600 px-10 py-5 rounded-sm font-bold hover:bg-slate-50 transition-all text-xs uppercase tracking-widest"
+                            >
+                                Speak to an Adviser
                             </button>
                         </div>
                     </div>
@@ -77,10 +89,16 @@ const ProtectionOverview = () => {
             <nav className="border-y border-gray-100 bg-white sticky top-[120px] z-40">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="flex overflow-x-auto gap-8 no-scrollbar py-4">
-                        {['Life Insurance', 'Critical Illness', 'Income Protection', 'Mortgage Protection', 'Buildings & Contents'].map((item) => (
-                            <a key={item} href="#" className="whitespace-nowrap text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-colors">
-                                {item}
-                            </a>
+                        {[
+                            { name: 'Life Insurance', path: '/protection/life-insurance' },
+                            { name: 'Critical Illness', path: '/protection/critical-illness' },
+                            { name: 'Income Protection', path: '/protection/income-protection' },
+                            { name: 'Mortgage Protection', path: '/protection/mortgage-protection' },
+                            { name: 'Buildings & Contents', path: '/protection/buildings-contents' }
+                        ].map((item) => (
+                            <Link key={item.name} to={item.path} className="whitespace-nowrap text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-colors">
+                                {item.name}
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -131,9 +149,12 @@ const ProtectionOverview = () => {
                                     </div>
                                 </div>
 
-                                <Link to={solution.path} className="bg-primary text-white px-8 py-3 rounded-sm font-bold hover:bg-blue-800 transition-all text-[10px] uppercase tracking-widest">
+                                <button
+                                    onClick={openGetStarted}
+                                    className="bg-primary text-white px-8 py-3 rounded-sm font-bold hover:bg-blue-800 transition-all text-[10px] uppercase tracking-widest"
+                                >
                                     Get Free Advice <span className="material-icons text-[10px] ml-1">chevron_right</span>
-                                </Link>
+                                </button>
                             </div>
                             <div className="lg:w-1/2 w-full">
                                 <div className="aspect-[16/10] bg-slate-100 rounded-sm overflow-hidden border border-gray-100">

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import { useModals } from '../context/ModalContext';
+import logo from '../assets/logo.png';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const { openGetStarted } = useModals();
 
     const mortgages = [
         { title: 'First Time Buyer', path: '/mortgages/first-time-buyer' },
@@ -28,10 +31,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
                     <Link to="/" className="flex items-center gap-2">
-                        <div className="w-9 h-9 bg-primary flex items-center justify-center rounded-sm">
-                            <span className="text-white font-bold text-lg">M</span>
-                        </div>
-                        <span className="text-lg font-bold tracking-tight text-primary uppercase">Mkwise Financial</span>
+                        <img src={logo} alt="Mkwise Financial Logo" className="h-12 w-auto" />
                     </Link>
 
                     <div className="hidden md:flex items-center gap-8">
@@ -88,9 +88,12 @@ const Navbar = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <Link to="/contact" className="hidden sm:block bg-primary hover:bg-blue-800 text-white px-6 py-2.5 rounded-sm text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20">
+                        <button
+                            onClick={openGetStarted}
+                            className="hidden sm:block bg-primary hover:bg-blue-800 text-white px-6 py-2.5 rounded-sm text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+                        >
                             Get Started
-                        </Link>
+                        </button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:text-primary transition-colors"
@@ -105,28 +108,30 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden bg-white border-t border-gray-100 pb-10 shadow-2xl max-h-[85vh] overflow-y-auto">
                     <div className="px-6 pt-6 space-y-4">
-                        <Link to="/" onClick={() => setIsOpen(false)} className="block py-2 text-xs font-black text-slate-900 uppercase tracking-widest border-b border-gray-50">Home</Link>
+                        <Link to="/" onClick={() => setIsOpen(false)} className="block py-4 text-xs font-black text-slate-900 uppercase tracking-widest border-b border-gray-50 active:bg-slate-50 transition-colors">Home</Link>
 
-                        <div className="py-2">
-                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-4 block">Mortgage Services</span>
-                            <div className="grid grid-cols-1 gap-2">
+                        <div className="py-4">
+                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.25em] mb-4 block opacity-60">Mortgage Services</span>
+                            <div className="grid grid-cols-1 gap-1">
                                 {mortgages.map((item) => (
-                                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="block py-1 text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">{item.title}</Link>
+                                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="block py-3 text-sm font-bold text-slate-600 hover:text-primary active:bg-slate-50 transition-all uppercase tracking-widest">{item.title}</Link>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="py-2">
-                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-4 block">Protection Advice</span>
-                            <div className="grid grid-cols-1 gap-2">
+                        <div className="py-4 border-t border-gray-50">
+                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.25em] mb-4 block opacity-60">Protection Advice</span>
+                            <div className="grid grid-cols-1 gap-1">
                                 {protections.map((item) => (
-                                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="block py-1 text-xs font-bold text-slate-500 hover:text-primary uppercase tracking-widest">{item.title}</Link>
+                                    <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="block py-3 text-sm font-bold text-slate-600 hover:text-primary active:bg-slate-50 transition-all uppercase tracking-widest">{item.title}</Link>
                                 ))}
                             </div>
                         </div>
 
-                        <Link to="/about" onClick={() => setIsOpen(false)} className="block py-2 text-xs font-black text-slate-900 uppercase tracking-widest border-b border-gray-50">About Us</Link>
-                        <Link to="/contact" onClick={() => setIsOpen(false)} className="block py-2 text-xs font-black text-slate-900 uppercase tracking-widest border-b border-gray-50">Contact Our Advisors</Link>
+                        <div className="pt-4 space-y-2 border-t border-gray-100">
+                            <Link to="/about" onClick={() => setIsOpen(false)} className="block py-4 text-xs font-black text-slate-900 uppercase tracking-widest active:bg-slate-50 transition-colors">About Us</Link>
+                            <Link to="/contact" onClick={() => setIsOpen(false)} className="block py-4 text-xs font-black text-slate-900 uppercase tracking-widest active:bg-slate-50 transition-colors">Contact Our Advisors</Link>
+                        </div>
                     </div>
                 </div>
             )}
