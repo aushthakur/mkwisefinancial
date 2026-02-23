@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
+import { Star, MessageSquare, ExternalLink, ShieldCheck } from 'lucide-react';
 
 const REVIEWS = [
     {
@@ -8,60 +8,53 @@ const REVIEWS = [
         role: "Homeowner",
         text: "Excellent service from Priyadarshi, he got the best deal and made it so simple throughout the process. I would highly recommend him.",
         rating: 5,
-        initials: "DR"
+        initials: "DR",
+        date: "2 days ago"
     },
     {
         name: "Sarah Jenkins",
         role: "Protection Client",
-        text: "MKWise Financial is brilliant in their services from start to finish. They don't just provide a one-time service, they maintain a long term relationship with their customers. They are knowledgeable, responsive and acted promptly.",
+        text: "MKWise Financial is brilliant in their services from start to finish. They don't just provide a one-time service, they maintain a long term relationship with their customers.",
         rating: 5,
-        initials: "SJ"
+        initials: "SJ",
+        date: "1 week ago"
     },
     {
         name: "Amit Patel",
         role: "BTL Investor",
         text: "Priyadarshi had not only help answering my questions but also given useful advice about lots of DOs and DONTs. Very friendly and helpful people.",
         rating: 5,
-        initials: "AP"
-    },
-    {
-        name: "Michael Thompson",
-        role: "First Time Buyer",
-        text: "It was great and friendly experience with MKWise. Very proactive in giving regular updates on finding a right and suitable mortgage, appreciate the professional work.",
-        rating: 5,
-        initials: "MT"
-    },
-    {
-        name: "Elena Rodriguez",
-        role: "Remortgage Client",
-        text: "Professional, patient and truly understood our family's needs regarding our protection policies. Highly recommend for mortgage advice.",
-        rating: 5,
-        initials: "ER"
+        initials: "AP",
+        date: "3 days ago"
     }
 ];
 
 const ReviewCard = ({ review }) => (
-    <div className="flex-shrink-0 w-[350px] mx-4">
-        <div className="bg-white/80 backdrop-blur-md p-8 rounded-[2rem] border border-slate-100 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] h-full flex flex-col relative group hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-500">
-            <Quote className="absolute top-8 right-8 text-primary/5 w-12 h-12 rotate-12 group-hover:text-primary/10 transition-colors" />
-
-            <div className="flex gap-1 mb-6">
-                {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
-                ))}
+    <div className="flex-shrink-0 w-[400px] mx-4 py-8">
+        <div className="bg-white p-8 rounded-3xl border border-slate-200/60 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] h-full flex flex-col relative group hover:border-blue-500/30 hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.12)] transition-all duration-500">
+            <div className="flex justify-between items-start mb-6">
+                <div className="flex gap-0.5">
+                    {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} size={16} className="fill-[#FBBC04] text-[#FBBC04]" />
+                    ))}
+                </div>
+                <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" />
             </div>
 
-            <p className="text-slate-600 font-medium leading-relaxed mb-8 flex-grow italic">
+            <p className="text-slate-700 font-medium leading-[1.8] mb-10 flex-grow text-[15px]">
                 "{review.text}"
             </p>
 
-            <div className="flex items-center gap-4 border-t border-slate-50 pt-6">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">
+            <div className="flex items-center gap-4 pt-6 border-t border-slate-100">
+                <div className="w-12 h-12 rounded-full bg-[#4285F4]/10 flex items-center justify-center text-[#4285F4] font-black text-sm">
                     {review.initials}
                 </div>
                 <div>
-                    <h4 className="font-black text-slate-900 text-sm tracking-tight">{review.name}</h4>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{review.role}</p>
+                    <h4 className="font-black text-slate-900 text-[14px] flex items-center gap-2">
+                        {review.name}
+                        <ShieldCheck size={14} className="text-blue-500" />
+                    </h4>
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{review.date}</p>
                 </div>
             </div>
         </div>
@@ -77,40 +70,61 @@ const GoogleReviews = () => {
 
     if (shuffledReviews.length === 0) return null;
 
-    // Triple the reviews to ensure smooth infinite loop
-    const displayReviews = [...shuffledReviews, ...shuffledReviews, ...shuffledReviews];
+    const displayReviews = [...shuffledReviews, ...shuffledReviews, ...shuffledReviews, ...shuffledReviews];
 
     return (
-        <section className="py-24 overflow-hidden bg-[#fbfcfd] relative">
-            {/* Background elements */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-400/5 blur-[120px] rounded-full" />
-            </div>
-
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-4">
-                        <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" className="w-3 h-3" />
-                        Verified Google Reviews
+        <section className="py-32 bg-white relative overflow-hidden">
+            {/* GMB Header Style */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-20 text-center">
+                <div className="inline-flex flex-col items-center">
+                    <div className="flex items-center gap-3 mb-6 px-5 py-2 rounded-full bg-slate-50 border border-slate-100 shadow-sm">
+                        <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" className="w-5 h-5 shadow-sm" />
+                        <span className="text-xs font-black text-slate-900 tracking-tight uppercase">Business Profile</span>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
-                        Trusted by Hundreds of <span className="text-primary">Families</span>
+
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tight mb-8">
+                        Our <span className="text-[#4285F4]">Google</span> Presence
                     </h2>
+
+                    <div className="flex flex-col md:flex-row items-center gap-8 p-8 rounded-[2.5rem] bg-[#f8f9fa] border border-slate-100 shadow-inner">
+                        <div className="flex flex-col items-center md:items-start">
+                            <div className="text-5xl font-black text-slate-900 mb-2">5.0</div>
+                            <div className="flex gap-1 mb-2">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={20} className="fill-[#FBBC04] text-[#FBBC04]" />
+                                ))}
+                            </div>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">150+ Verified Reviews</p>
+                        </div>
+
+                        <div className="w-px h-16 bg-slate-200 hidden md:block" />
+
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {[
+                                { label: "Professionalism", score: "5.0" },
+                                { label: "Responsiveness", score: "5.0" },
+                                { label: "Integrity", score: "5.0" }
+                            ].map((stat, i) => (
+                                <div key={i} className="px-4 py-2 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
+                                    <div className="w-2 h-2 rounded-full bg-[#34A853]" />
+                                    <span className="text-[11px] font-black text-slate-900 uppercase tracking-tight">{stat.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Marquee Container */}
-            <div className="flex relative items-center">
-                {/* Gradient Masks */}
-                <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#fbfcfd] to-transparent z-10 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#fbfcfd] to-transparent z-10 pointer-events-none" />
+            {/* Infinite Marquee */}
+            <div className="relative group">
+                <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
                 <motion.div
                     initial={{ x: 0 }}
-                    animate={{ x: "-33.33%" }}
+                    animate={{ x: "-50%" }}
                     transition={{
-                        duration: 40,
+                        duration: 60,
                         repeat: Infinity,
                         ease: "linear"
                     }}
@@ -122,15 +136,16 @@ const GoogleReviews = () => {
                 </motion.div>
             </div>
 
-            <div className="mt-16 text-center">
+            <div className="mt-20 text-center">
                 <a
                     href="https://share.google/XEmORk9FTEeJRIxaG"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-colors group"
+                    className="inline-flex items-center gap-4 px-8 py-4 bg-[#f8f9fa] hover:bg-white border border-slate-200 rounded-2xl text-[12px] font-black text-slate-900 uppercase tracking-[0.1em] transition-all hover:shadow-xl hover:scale-105 group"
                 >
-                    View All 150+ Reviews on Google
-                    <Quote size={12} className="rotate-180 group-hover:translate-x-1 transition-transform" />
+                    <MessageSquare size={16} className="text-[#4285F4]" />
+                    Read all reviews on Google Maps
+                    <ExternalLink size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
                 </a>
             </div>
         </section>

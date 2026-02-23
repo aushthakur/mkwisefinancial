@@ -8,6 +8,7 @@ import GetStartedModal from './GetStartedModal';
 import LetsTalkModal from './LetsTalkModal';
 import SchedulerModal from './SchedulerModal';
 import StickyBookingButton from './StickyBookingButton';
+import ReviewToast from './ReviewToast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
@@ -25,6 +26,7 @@ const Layout = ({ children }) => {
             <LetsTalkModal isOpen={isLetsTalkOpen} onClose={closeLetsTalk} />
             <SchedulerModal isOpen={isSchedulerOpen} onClose={closeScheduler} />
             <StickyBookingButton />
+            <ReviewToast />
             <div className="sticky top-0 z-[60]">
                 <Navbar />
                 <InterestRateScroller />
