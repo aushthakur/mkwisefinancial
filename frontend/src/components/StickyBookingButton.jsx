@@ -8,49 +8,31 @@ const StickyBookingButton = () => {
 
     return (
         <motion.div
-            initial={{ x: 120, opacity: 0 }}
+            initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8, type: 'spring', bounce: 0.4 }}
+            transition={{ delay: 1, duration: 0.8, type: 'spring' }}
             className="fixed right-0 top-1/2 -translate-y-1/2 z-[55]"
         >
             <button
                 onClick={openScheduler}
-                className="group relative flex items-center gap-3 md:gap-4 bg-slate-900 text-white py-3.5 md:py-5 pl-5 md:pl-7 pr-4 md:pr-6 rounded-l-[1.5rem] md:rounded-l-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] hover:bg-primary transition-all duration-500 hover:pr-8 md:hover:pr-10 border-l border-t border-b border-white/10 group overflow-hidden"
+                className="group relative flex items-center gap-2 md:gap-3 bg-white/80 backdrop-blur-md text-slate-600 py-2.5 md:py-3 pl-4 md:pl-5 pr-3 md:pr-4 rounded-l-xl md:rounded-l-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] hover:bg-white hover:text-primary transition-all duration-500 border-l border-t border-b border-slate-200/50 overflow-hidden"
             >
-                {/* Background Animation */}
-                <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.2, 0.4, 0.2]
-                    }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent pointer-events-none"
-                />
-
                 <div className="flex flex-col items-start relative z-10">
-                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-primary group-hover:text-white/80 transition-colors mb-0.5 md:mb-1">
+                    <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors">
                         Consult Now
                     </span>
-                    <span className="text-xs md:text-[15px] font-black tracking-tight flex items-center gap-2">
+                    <span className="text-[10px] md:text-xs font-semibold tracking-tight text-slate-700 group-hover:text-primary transition-colors">
                         Seek a advisor
-                        <Sparkles size={12} className="text-primary group-hover:text-white animate-pulse hidden md:block" />
                     </span>
                 </div>
 
-                <div className="relative z-10 w-9 h-9 md:w-11 md:h-11 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:bg-white group-hover:scale-110 group-active:scale-95 border border-white/10 group-hover:border-transparent">
-                    <Calendar size={18} className="text-white group-hover:text-primary transition-colors md:hidden" />
-                    <Calendar size={22} className="text-white group-hover:text-primary transition-colors hidden md:block" />
-
-                    {/* Ring animation */}
-                    <div className="absolute inset-0 rounded-xl md:rounded-2xl border-2 border-primary opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-500" />
+                <div className="relative z-10 w-7 h-7 md:w-8 md:h-8 bg-primary/5 rounded-lg flex items-center justify-center transition-all duration-500 group-hover:bg-primary group-hover:text-white border border-primary/10">
+                    <Calendar size={14} className="md:hidden" />
+                    <Calendar size={16} className="hidden md:block" />
                 </div>
 
-                <div className="absolute right-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-500 relative z-10">
-                    <ChevronRight size={18} strokeWidth={3} />
-                </div>
-
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500" />
+                {/* Subtle Glow */}
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </button>
         </motion.div>
     );
