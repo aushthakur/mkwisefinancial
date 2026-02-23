@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useModals } from '../context/ModalContext';
+import GoogleReviews from '../components/GoogleReviews';
 
 const Home = () => {
     const { openGetStarted, openLetsTalk } = useModals();
@@ -171,58 +172,8 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-24 overflow-hidden bg-white dark:bg-background-dark">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <h2 className="text-3xl font-bold text-center mb-16">Trusted by Families Across the UK</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
-                        <div className="bg-white dark:bg-slate-900 p-10 rounded-xl relative border border-primary/5">
-                            <div className="flex gap-1 text-yellow-400 mb-6">
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                            </div>
-                            <p className="text-lg italic text-slate-700 dark:text-slate-300 mb-8">
-                                "As first-time buyers, we were lost. Mkwise Financial made everything so simple. They found us a rate we couldn't find anywhere else."
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-200">
-                                    <img alt="David Richardson" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3Q5gKu5NkIFQ1BBvYIxlDxi427w_CYjDSeMh8QMmEZqhzQ16nYZp4eryJUExLp2V1j9XdrDNCoVfZxBA6iYQ6Hp2CyZzJ-a3_d0pVxc2ecU6XyzbNiBZuBfmNVyQ72riA3-nV0Cxoq2YBPNJZOEULqw960jb-h-aw6mENTDknmig-jiN2phrQaj2Vv8Ycfb8RZSsR6oP5F6GWOhsYQM12DREP757H_jt4XdUjs0Jg8LwM7_AICs5XypVnwnVS8KN8SxBXk4JFQgU" />
-                                </div>
-                                <div>
-                                    <p className="font-bold">David Richardson</p>
-                                    <p className="text-sm text-slate-500">London Homeowner</p>
-                                </div>
-                            </div>
-                            <span className="material-icons absolute top-10 right-10 text-primary/10 text-6xl text-[inherit]">format_quote</span>
-                        </div>
-                        <div className="bg-white dark:bg-slate-900 p-10 rounded-xl relative border border-primary/5">
-                            <div className="flex gap-1 text-yellow-400 mb-6">
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                                <span className="material-icons text-[inherit]">star</span>
-                            </div>
-                            <p className="text-lg italic text-slate-700 dark:text-slate-300 mb-8">
-                                "Excellent service regarding our life protection policies. Professional, patient and truly understood our family's needs."
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-200">
-                                    <img alt="Sarah Jenkins" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD1-MvVsButea2sdet4RN3yiqiZWNnDNkjbeUClgc79gJCiILBfWHQlnZ0CXsYQJXx_EOp4LIXkKbQITwSbgKimKKUU12bBAXLa9qRkCVSCQsP1wAyH_4KJc10xgsgE_Z7fpEV6ql4rfJy3kWghym4V6C1QEeMUbjK1mP1BhdVSo-Etf7LY2i1mpfVcNpVWw4stvhU9Q_Uy8-9u58A_YzPAgosQa6h9-TzXfN87-MuwKjv5IO2rhyUrW9-9qz8O0EqX26Iu-rBVq0" />
-                                </div>
-                                <div>
-                                    <p className="font-bold">Sarah Jenkins</p>
-                                    <p className="text-sm text-slate-500">Protection Client</p>
-                                </div>
-                            </div>
-                            <span className="material-icons absolute top-10 right-10 text-primary/10 text-6xl text-[inherit]">format_quote</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {/* Google Reviews Testimonials */}
+            <GoogleReviews />
         </div>
     );
 };
