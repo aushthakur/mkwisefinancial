@@ -6,17 +6,23 @@ import InterestRateScroller from './InterestRateScroller';
 import { useModals } from '../context/ModalContext';
 import GetStartedModal from './GetStartedModal';
 import LetsTalkModal from './LetsTalkModal';
+import SchedulerModal from './SchedulerModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
 const Layout = ({ children }) => {
     const location = useLocation();
-    const { isGetStartedOpen, closeGetStarted, isLetsTalkOpen, closeLetsTalk } = useModals();
+    const {
+        isGetStartedOpen, closeGetStarted,
+        isLetsTalkOpen, closeLetsTalk,
+        isSchedulerOpen, closeScheduler
+    } = useModals();
 
     return (
         <div className="min-h-screen flex flex-col pt-0 bg-white selection:bg-primary/20">
             <GetStartedModal isOpen={isGetStartedOpen} onClose={closeGetStarted} />
             <LetsTalkModal isOpen={isLetsTalkOpen} onClose={closeLetsTalk} />
+            <SchedulerModal isOpen={isSchedulerOpen} onClose={closeScheduler} />
             <div className="sticky top-0 z-[60]">
                 <Navbar />
                 <InterestRateScroller />

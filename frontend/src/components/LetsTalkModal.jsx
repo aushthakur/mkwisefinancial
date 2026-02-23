@@ -1,7 +1,9 @@
 import React from 'react';
-import { X, Phone, MessageSquare, Calendar, CheckCircle } from 'lucide-react';
+import { X, Phone, MessageSquare, Calendar, CheckCircle, ChevronRight } from 'lucide-react';
+import { useModals } from '../context/ModalContext';
 
 const LetsTalkModal = ({ isOpen, onClose }) => {
+    const { openScheduler } = useModals();
     if (!isOpen) return null;
 
     return (
@@ -64,23 +66,21 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
                     </a>
 
                     {/* Book a Callback */}
-                    <a
-                        href={import.meta.env.VITE_OUTLOOK_CALENDAR_URL || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between p-6 bg-primary rounded-xl group transition-all shadow-xl shadow-blue-600/20 hover:bg-blue-800 hover:scale-[1.02] active:scale-[0.98]"
+                    <button
+                        onClick={openScheduler}
+                        className="w-full flex items-center justify-between p-6 bg-primary rounded-xl group transition-all shadow-xl shadow-blue-600/20 hover:bg-blue-800 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                     >
                         <div className="flex items-center gap-5">
-                            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white">
+                            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white text-2xl">
                                 <Calendar size={24} />
                             </div>
                             <div className="text-left">
                                 <p className="text-lg font-black text-white leading-tight">Book a Callback</p>
-                                <p className="text-xs text-blue-100/70 font-bold tracking-tight mt-1">Choose a time on Outlook Calendar</p>
+                                <p className="text-xs text-blue-100/70 font-bold tracking-tight mt-1">On-site scheduling • Google & Outlook</p>
                             </div>
                         </div>
-                        <span className="material-icons text-white/30 text-sm group-hover:text-white transition-colors">chevron_right</span>
-                    </a>
+                        <ChevronRight className="text-white/30 group-hover:text-white transition-colors" size={20} />
+                    </button>
                 </div>
 
                 <div className="p-8 py-10 bg-slate-50 border-t border-gray-100">

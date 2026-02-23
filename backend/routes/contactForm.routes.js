@@ -23,6 +23,12 @@ router.post('/', async (req, res) => {
                 const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
                 console.log('Forwarding lead to GHL:', { firstName, lastName, email });
+                if (req.body.isBooking) {
+                    console.log('📅 Appointment Booking Received:', {
+                        date: req.body.bookingDate,
+                        time: req.body.bookingTime
+                    });
+                }
 
                 const ghlResponse = await axios.post(ghlWebhookUrl, {
                     firstName,

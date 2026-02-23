@@ -5,12 +5,19 @@ const ModalContext = createContext();
 export const ModalProvider = ({ children }) => {
     const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
     const [isLetsTalkOpen, setIsLetsTalkOpen] = useState(false);
+    const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
 
     const openGetStarted = () => setIsGetStartedOpen(true);
     const closeGetStarted = () => setIsGetStartedOpen(false);
 
     const openLetsTalk = () => setIsLetsTalkOpen(true);
     const closeLetsTalk = () => setIsLetsTalkOpen(false);
+
+    const openScheduler = () => {
+        setIsLetsTalkOpen(false);
+        setIsSchedulerOpen(true);
+    };
+    const closeScheduler = () => setIsSchedulerOpen(false);
 
     return (
         <ModalContext.Provider
@@ -20,7 +27,10 @@ export const ModalProvider = ({ children }) => {
                 closeGetStarted,
                 isLetsTalkOpen,
                 openLetsTalk,
-                closeLetsTalk
+                closeLetsTalk,
+                isSchedulerOpen,
+                openScheduler,
+                closeScheduler
             }}
         >
             {children}
