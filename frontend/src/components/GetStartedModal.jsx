@@ -120,7 +120,8 @@ Source: ${formData.source || 'Not specified'}
             await axios.post(`${apiUrl}/api/contact`, {
                 name: formData.name, email: formData.email,
                 phone: formData.phone, serviceType: formData.intent,
-                message: detailedMessage
+                message: detailedMessage,
+                ...formData // Send individual fields for CRM mapping
             });
             changeStep(13);
         } catch (error) {
@@ -171,13 +172,14 @@ Source: ${formData.source || 'Not specified'}
 
     const renderOptionButton = (label, onClick, isSelected = false) => (
         <motion.button
+            key={label}
             variants={itemVariants}
             whileHover={{ scale: 1.02, translateY: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
             className={`w-full p-5 text-left border-2 rounded-2xl transition-all duration-300 flex justify-between items-center group relative overflow-hidden ${isSelected
-                    ? 'border-primary bg-primary/5 shadow-lg shadow-primary/10'
-                    : 'border-slate-100 bg-white hover:border-primary/30 hover:shadow-md'
+                ? 'border-primary bg-primary/5 shadow-lg shadow-primary/10'
+                : 'border-slate-100 bg-white hover:border-primary/30 hover:shadow-md'
                 }`}
         >
             <span className={`font-bold transition-colors ${isSelected ? 'text-primary' : 'text-slate-600'}`}>

@@ -13,6 +13,8 @@ router.post('/', async (req, res) => {
 
         // Forward to GoHighLevel if configured
         const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
+        console.log('Checking GHL Webhook configuration:', ghlWebhookUrl ? 'Configured' : 'Not Configured');
+
         if (ghlWebhookUrl && ghlWebhookUrl !== 'your_ghl_webhook_url_here') {
             try {
                 // Parse name into first/last name for GHL
@@ -20,19 +22,24 @@ router.post('/', async (req, res) => {
                 const firstName = nameParts[0] || '';
                 const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-                await axios.post(ghlWebhookUrl, {
+                console.log('Forwarding lead to GHL:', { firstName, lastName, email });
+
+                const ghlResponse = await axios.post(ghlWebhookUrl, {
                     firstName,
                     lastName,
                     email,
                     phone,
                     serviceType,
                     message,
+                    ...req.body, // Spread all questionnaire fields (intent, income, propertyValue, etc.)
                     source: 'Website Lead'
                 });
-                console.log('Lead successfully forwarded to GoHighLevel');
+                console.log('GHL response received. Status:', ghlResponse.status);
             } catch (ghlError) {
                 console.error('Error forwarding lead to GoHighLevel:', ghlError.message);
-                // We don't return here so the lead is still saved to DB/Local
+                if (ghlError.response) {
+                    console.error('GHL Error Response Data:', ghlError.response.data);
+                }
             }
         }
 
