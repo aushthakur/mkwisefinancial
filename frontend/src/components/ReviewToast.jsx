@@ -36,7 +36,7 @@ const ReviewToast = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % REVIEWS.length);
-        }, 8000); // Cycle every 8 seconds
+        }, 5000); // Cycle every 5 seconds
 
         return () => clearInterval(interval);
     }, []);
@@ -51,19 +51,19 @@ const ReviewToast = () => {
                 key={currentIndex}
                 initial={{ opacity: 0, y: 50, scale: 0.9, x: -20 }}
                 animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
-                exit={{ opacity: 0, y: 20, scale: 0.95, transition: { duration: 0.3 } }}
-                className="fixed bottom-6 left-6 z-[100] w-[320px] hidden md:block"
+                exit={{ opacity: 0, y: 15, scale: 0.98, transition: { duration: 0.2 } }}
+                className="fixed bottom-6 left-6 z-[100] w-[260px] hidden md:block"
             >
-                <div className="bg-white/90 backdrop-blur-xl p-5 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-white/20 group relative overflow-hidden">
+                <div className="bg-white/90 backdrop-blur-xl p-4 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-white/20 group relative overflow-hidden">
                     {/* Progress Bar */}
-                    <motion.div 
+                    <motion.div
                         initial={{ width: "0%" }}
                         animate={{ width: "100%" }}
-                        transition={{ duration: 8, ease: "linear" }}
+                        transition={{ duration: 5, ease: "linear" }}
                         className="absolute bottom-0 left-0 h-1 bg-primary/20"
                     />
 
-                    <button 
+                    <button
                         onClick={() => setIsVisible(false)}
                         className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors"
                     >
