@@ -52,7 +52,7 @@ const ReviewToast = () => {
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.98, transition: { duration: 0.15 } }}
-                className="fixed bottom-4 left-4 right-4 md:right-auto md:w-[240px] z-[100]"
+                className="fixed bottom-24 md:bottom-6 left-4 right-4 md:right-auto md:w-[240px] z-[100]"
             >
                 <div className="bg-white/95 backdrop-blur-xl p-3 md:p-3.5 rounded-2xl shadow-[0_15px_40px_-12px_rgba(0,0,0,0.15)] border border-white/20 group relative overflow-hidden">
                     {/* Progress Bar */}
