@@ -4,11 +4,37 @@ const mongoose = require('mongoose');
 const ContactLead = require('../models/contactForm.model');
 const fs = require('fs').promises;
 const path = require('path');
+const axios = require('axios');
 
 // POST /api/contact
 router.post('/', async (req, res) => {
     try {
         const { name, email, phone, message, serviceType } = req.body;
+
+        // Forward to GoHighLevel if configured
+        const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
+        if (ghlWebhookUrl && ghlWebhookUrl !== 'your_ghl_webhook_url_here') {
+            try {
+                // Parse name into first/last name for GHL
+                const nameParts = name.trim().split(/\s+/);
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+                await axios.post(ghlWebhookUrl, {
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    serviceType,
+                    message,
+                    source: 'Website Lead'
+                });
+                console.log('Lead successfully forwarded to GoHighLevel');
+            } catch (ghlError) {
+                console.error('Error forwarding lead to GoHighLevel:', ghlError.message);
+                // We don't return here so the lead is still saved to DB/Local
+            }
+        }
 
         // Try to save to MongoDB if connected
         if (mongoose.connection.readyState === 1) {
