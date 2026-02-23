@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Bot, Minimize2, ExternalLink, Loader2, User, ChevronDown } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Minimize2, ExternalLink, Loader2, User, ChevronDown, Calendar } from 'lucide-react';
 import axios from 'axios';
+import { useModals } from '../context/ModalContext';
 
 const SUGGESTED_QUESTIONS = [
+    'How do I book a consultation call?',
     'What are current UK mortgage rates?',
     'How much can I borrow for a mortgage?',
     'What is LTV and why does it matter?',
     'How does remortgaging work in the UK?',
-    'What is Help to Buy?',
     'What documents do I need for a mortgage?',
 ];
 
@@ -104,6 +105,29 @@ const Chatbot = () => {
         const question = text || input.trim();
         if (!question || isLoading) return;
 
+        // Custom check for booking consultation
+        const lowerQ = question.toLowerCase();
+        if (lowerQ.includes('book') || lowerQ.includes('schedule') || lowerQ.includes('consultation')) {
+            const userMsg = { role: 'user', content: question };
+            setMessages(prev => [...prev, userMsg]);
+            setInput('');
+            setIsLoading(true);
+
+            setTimeout(() => {
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: "Certainly! I'm opening our consultation scheduler for you right now.",
+                    sources: null
+                }]);
+                setIsLoading(false);
+                setTimeout(() => {
+                    setIsOpen(false);
+                    openScheduler();
+                }, 1500);
+            }, 600);
+            return;
+        }
+
         const userMsg = { role: 'user', content: question };
         setMessages(prev => [...prev, userMsg]);
         setInput('');
@@ -165,9 +189,21 @@ const Chatbot = () => {
                                 </div>
                             </div>
                         </div>
-                        <button onClick={() => setIsOpen(false)} className="text-white/60 hover:text-white transition-colors p-1">
-                            <X size={20} />
-                        </button>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    openScheduler();
+                                }}
+                                className="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg flex items-center gap-2"
+                                title="Book a Call"
+                            >
+                                <Calendar size={18} />
+                            </button>
+                            <button onClick={() => setIsOpen(false)} className="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg">
+                                <Minimize2 size={18} />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Messages */}

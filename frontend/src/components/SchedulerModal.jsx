@@ -6,6 +6,14 @@ const SchedulerModal = ({ isOpen, onClose }) => {
     const [loading, setLoading] = useState(true);
     const ghlCalendarUrl = import.meta.env.VITE_GHL_CALENDAR_URL || '';
 
+    React.useEffect(() => {
+        if (isOpen && ghlCalendarUrl) {
+            setLoading(true);
+            const timer = setTimeout(() => setLoading(false), 10000); // 10s fallback
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen, ghlCalendarUrl]);
+
     if (!isOpen) return null;
 
     const modalVariants = {
