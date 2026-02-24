@@ -81,7 +81,7 @@ const GoogleReviews = () => {
                         <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" className="w-4 h-4 md:w-5 md:h-5 shadow-sm" />
                         <span className="text-[10px] md:text-xs font-black text-slate-900 tracking-tight uppercase">Business Profile</span>
                     </div>
-                    
+
                     <h2 className="text-3xl md:text-6xl font-black text-slate-950 tracking-tight mb-6 md:mb-8 leading-tight">
                         Our <span className="text-[#4285F4]">Google</span> Presence
                     </h2>
@@ -96,9 +96,9 @@ const GoogleReviews = () => {
                             </div>
                             <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">150+ Verified Reviews</p>
                         </div>
-                        
+
                         <div className="w-full md:w-px h-px md:h-16 bg-slate-200" />
-                        
+
                         <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
                             {[
                                 { label: "Expertise", score: "5.0" },
@@ -120,13 +120,13 @@ const GoogleReviews = () => {
                 <div className="absolute left-0 top-0 bottom-0 w-12 md:w-48 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-12 md:w-48 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
-                <motion.div 
+                <motion.div
                     initial={{ x: 0 }}
                     animate={{ x: "-50%" }}
-                    transition={{ 
-                        duration: 30, 
-                        repeat: Infinity, 
-                        ease: "linear" 
+                    transition={{
+                        duration: 30,
+                        repeat: Infinity,
+                        ease: "linear"
                     }}
                     className="flex"
                 >
@@ -137,9 +137,9 @@ const GoogleReviews = () => {
             </div>
 
             <div className="mt-10 md:mt-20 text-center px-6">
-                <a 
-                    href="https://share.google/XEmORk9FTEeJRIxaG" 
-                    target="_blank" 
+                <a
+                    href="https://share.google/XEmORk9FTEeJRIxaG"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 md:gap-4 px-6 md:px-8 py-3.5 md:py-4 bg-[#f8f9fa] hover:bg-white border border-slate-200 rounded-xl md:rounded-2xl text-[10px] md:text-[12px] font-black text-slate-900 uppercase tracking-[0.1em] transition-all hover:shadow-xl active:scale-95 group w-full md:w-auto justify-center shadow-sm"
                 >
@@ -153,4 +153,4 @@ const GoogleReviews = () => {
 };
 
 export default GoogleReviews;
-坐坐坐坐坐
+
