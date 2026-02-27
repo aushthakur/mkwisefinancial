@@ -125,7 +125,7 @@ const MortgageOverview = () => {
                     <div className="flex flex-wrap gap-4 justify-center">
                         <div className="bg-white text-primary px-8 py-3 rounded-sm font-bold flex items-center gap-3">
                             <span className="material-icons">phone</span>
-                            Call 020 7946 0000
+                            Call +44-7725839574
                         </div>
                         <button
                             onClick={openGetStarted}

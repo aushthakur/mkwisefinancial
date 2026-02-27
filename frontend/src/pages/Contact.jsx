@@ -132,7 +132,7 @@ const Contact = () => {
                                 onChange={handleChange}
                                 required
                                 className="w-full bg-[#f8f9fb] border border-gray-100 rounded-sm px-4 py-3 text-slate-900 focus:ring-1 focus:ring-primary transition-all outline-none"
-                                placeholder="john.doe@example.com"
+                                placeholder="contact@mkwisefinancial.com"
                             />
                         </div>
 
@@ -145,7 +145,7 @@ const Contact = () => {
                                 onChange={handleChange}
                                 required
                                 className="w-full bg-[#f8f9fb] border border-gray-100 rounded-sm px-4 py-3 text-slate-900 focus:ring-1 focus:ring-primary transition-all outline-none"
-                                placeholder="+44 0000 000000"
+                                placeholder="+44-7725839574"
                             />
                         </div>
 

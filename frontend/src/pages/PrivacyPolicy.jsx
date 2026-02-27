@@ -72,7 +72,7 @@ const PrivacyPolicy = () => {
                     <section>
                         <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">4. Your Rights</h2>
                         <p>
-                            You have the right to access, correct, or request the deletion of your personal data. You also have the right to object to processing and the right to data portability. To exercise these rights, please contact our Data Protection Officer at info@mkwisefinancial.co.uk.
+                            You have the right to access, correct, or request the deletion of your personal data. You also have the right to object to processing and the right to data portability. To exercise these rights, please contact our Data Protection Officer at contact@mkwisefinancial.com.
                         </p>
                     </section>
                 </div>

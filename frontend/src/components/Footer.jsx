@@ -16,7 +16,7 @@ const Footer = () => {
                         </p>
                         <div className="flex gap-4">
                             <a className="hover:text-primary transition-colors cursor-pointer" href="https://facebook.com/mkwisefinancial" target="_blank" rel="noopener noreferrer"><span className="material-icons text-xl text-[inherit]">facebook</span></a>
-                            <a className="hover:text-primary transition-colors cursor-pointer" href="mailto:info@mkwisefinancial.co.uk"><span className="material-icons text-xl text-[inherit]">alternate_email</span></a>
+                            <a className="hover:text-primary transition-colors cursor-pointer" href="mailto:contact@mkwisefinancial.com"><span className="material-icons text-xl text-[inherit]">alternate_email</span></a>
                         </div>
                     </div>
                     <div>
@@ -39,9 +39,10 @@ const Footer = () => {
                     </div>
                     <div>
                         <h5 className="text-white font-bold mb-6 uppercase text-xs tracking-widest">Contact</h5>
-                        <p className="text-sm mb-2">info@mkwisefinancial.co.uk</p>
-                        <p className="text-sm mb-2">020 7946 0000</p>
-                        <p className="text-sm">Main Office, Canary Wharf<br />London, E14 5AA</p>
+                        <p className="text-sm mb-2">contact@mkwisefinancial.com</p>
+                        <p className="text-sm mb-2">+44-7725839574</p>
+                        <p className="text-sm mb-2">01908-732244</p>
+                        <p className="text-sm">Suite 5, Margaret Powell House<br />401-447 Midsummer Boulevard<br />Milton Keynes, MK9 3BN</p>
                     </div>
                 </div>
                 <div className="border-t border-slate-800 pt-8 text-[11px] leading-relaxed text-slate-500 uppercase tracking-tight">

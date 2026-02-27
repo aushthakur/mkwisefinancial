@@ -33,7 +33,7 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
                 <div className="p-8 space-y-4">
                     {/* Call Now */}
                     <a
-                        href="tel:+442079460000"
+                        href="tel:+447725839574"
                         className="flex items-center justify-between p-6 bg-white border border-gray-100 rounded-xl group transition-all hover:shadow-xl hover:border-primary/20"
                     >
                         <div className="flex items-center gap-5">
@@ -42,7 +42,7 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
                             </div>
                             <div className="text-left">
                                 <p className="text-lg font-black text-slate-900 leading-tight">Call Now</p>
-                                <p className="text-xs text-slate-400 font-bold tracking-tight mt-1">+44 (0) 20 7946 0000</p>
+                                <p className="text-xs text-slate-400 font-bold tracking-tight mt-1">+44 7725 839574</p>
                             </div>
                         </div>
                         <span className="material-icons text-slate-200 text-sm group-hover:text-primary transition-colors">chevron_right</span>
@@ -50,7 +50,7 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
 
                     {/* WhatsApp */}
                     <a
-                        href="https://wa.me/442079460000"
+                        href="https://wa.me/447725839574"
                         className="flex items-center justify-between p-6 bg-white border border-gray-100 rounded-xl group transition-all hover:shadow-xl hover:border-primary/20"
                     >
                         <div className="flex items-center gap-5">
