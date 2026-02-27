@@ -14,8 +14,8 @@ const simpleYesNo = ['Yes', 'No'];
 const depositOptions = ['Yes', 'No', 'Saving For One'];
 const callTimeOptions = ['9:00 - 12:00 pm', '12:00 - 3:00 pm', '3:00 - 6:00 pm', 'After 6:00 pm'];
 const timelineOptions = ['ASAP', '1 to 3 months', '4 to 6 months', '7 to 12 months', '12 months plus'];
-const maritalStatusOptions = ['Married', 'Divorced', 'Separated', 'Widow', 'Widower', 'Co-Habiting', 'Civil Partner'];
-const employmentTypeOptions = ['Limited Company', 'Partnership', 'LLP', 'Individual'];
+const maritalStatusOptions = ['Single', 'Married', 'Divorced', 'Separated', 'Widow', 'Widower', 'Co-Habiting', 'Civil Partner'];
+const employmentTypeOptions = ['Employed', 'Contractor', 'Limited Company', 'Partnership', 'LLP'];
 const sourceOptions = ['Social Media', 'Friend', 'Internet', 'Others'];
 
 const modalVariants = {
@@ -257,6 +257,12 @@ Source: ${formData.source || 'Not specified'}
                             Next Step
                             <ChevronRight size={18} className="inline ml-2 group-hover:translate-x-1 transition-transform" />
                         </button>
+                        <button
+                            onClick={() => changeStep(6)}
+                            className="w-full text-slate-400 font-black hover:text-primary transition-colors py-2 uppercase tracking-widest text-[10px]"
+                        >
+                            Skip / Not decided yet
+                        </button>
                     </div>
                 );
             case 6:
@@ -277,6 +283,12 @@ Source: ${formData.source || 'Not specified'}
                             className="w-full bg-slate-900 hover:bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl shadow-slate-900/10"
                         >
                             Next Step
+                        </button>
+                        <button
+                            onClick={() => (formData.primaryUse === 'Rent it out' || formData.intent === 'Invest In Property') ? changeStep(7) : changeStep(8)}
+                            className="w-full text-slate-400 font-black hover:text-primary transition-colors py-2 uppercase tracking-widest text-[10px]"
+                        >
+                            Skip / Not decided yet
                         </button>
                     </div>
                 );

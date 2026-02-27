@@ -26,6 +26,30 @@ const REVIEWS = [
         rating: 5,
         initials: "AP",
         date: "3 days ago"
+    },
+    {
+        name: "Michael Chen",
+        role: "First-Time Buyer",
+        text: "As a first-time buyer, I was overwhelmed. The team at MKWise made everything clear and found me a rate I couldn't get elsewhere. Outstanding support!",
+        rating: 5,
+        initials: "MC",
+        date: "5 days ago"
+    },
+    {
+        name: "Emma Wilson",
+        role: "Remortgage Client",
+        text: "Managed to save me over £200 a month on my mortgage switch. The process was entirely stress-free. and the communication was top-notch.",
+        rating: 5,
+        initials: "EW",
+        date: "1 day ago"
+    },
+    {
+        name: "Robert Taylor",
+        role: "Homeowner",
+        text: "Professional, transparent, and incredibly fast. They really went above and beyond to secure our mortgage under tight deadlines.",
+        rating: 5,
+        initials: "RT",
+        date: "4 days ago"
     }
 ];
 

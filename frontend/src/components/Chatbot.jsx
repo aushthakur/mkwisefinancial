@@ -5,7 +5,7 @@ import { useModals } from '../context/ModalContext';
 
 const SUGGESTED_QUESTIONS = [
     'How do I book a consultation call?',
-    'What are current UK mortgage rates?',
+    'What is the current BoE Base Rate?',
     'How much can I borrow for a mortgage?',
     'What is LTV and why does it matter?',
     'How does remortgaging work in the UK?',
@@ -239,7 +239,7 @@ const Chatbot = () => {
                     {/* Disclaimer */}
                     <div className="px-4 py-2 bg-amber-50 border-t border-amber-100">
                         <p className="text-[9px] text-amber-700 font-bold leading-tight">
-                            AI-generated guidance only. For regulated advice, speak to an FCA-authorised advisor.
+                            AI-generated guidance only. For regulated advice, speak to an FCA authorised advisor.
                         </p>
                     </div>
 

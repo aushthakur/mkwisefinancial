@@ -33,8 +33,8 @@ const Footer = () => {
                         <ul className="space-y-4 text-sm">
                             <li><Link className="hover:text-primary transition-colors" to="/about">About Us</Link></li>
                             <li><Link className="hover:text-primary transition-colors" to="/contact">Contact Us</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" to="/contact">Privacy Policy</Link></li>
-                            <li><Link className="hover:text-primary transition-colors" to="/contact">Terms of Service</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" to="/privacy-policy">Privacy Policy</Link></li>
+                            <li><Link className="hover:text-primary transition-colors" to="/terms-of-service">Terms of Service</Link></li>
                         </ul>
                     </div>
                     <div>
@@ -46,7 +46,7 @@ const Footer = () => {
                 </div>
                 <div className="border-t border-slate-800 pt-8 text-[11px] leading-relaxed text-slate-500 uppercase tracking-tight">
                     <p className="mb-4">
-                        Mkwise Financial is an appointed representative of [Network Name Here] which is authorised and regulated by the Financial Conduct Authority (FCA). Our FCA Register number is [Number].
+                        Mkwise Financial is an appointed representative of Connect IFA Ltd which is authorised and regulated by the Financial Conduct Authority (FCA). Our FCA Register number is 441505.
                     </p>
                     <p className="mb-4 text-white font-bold">
                         YOUR HOME MAY BE REPOSSESSED IF YOU DO NOT KEEP UP REPAYMENTS ON YOUR MORTGAGE.

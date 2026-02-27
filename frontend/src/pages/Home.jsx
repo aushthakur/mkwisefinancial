@@ -50,14 +50,14 @@ const Home = () => {
                             Tailored to You
                         </h1>
                         <p className="text-xl text-slate-300 mb-12 leading-relaxed max-w-2xl font-medium">
-                            Navigating the UK market to find your perfect home loan and total financial security. We search the whole of market to find the best rates for your unique circumstances.
+                            Navigating the UK market to find your perfect home loan and total financial security. We work with a panel of lenders to find the best rates for your unique circumstances.
                         </p>
                         <div className="flex flex-wrap gap-4">
                             <button
                                 onClick={openGetStarted}
                                 className="bg-primary hover:bg-blue-700 text-white px-10 py-5 rounded-sm font-bold transition-all shadow-xl shadow-blue-500/20 uppercase tracking-widest text-xs"
                             >
-                                Get Free Advice
+                                SEEK AN ADVISOR
                             </button>
                             <button
                                 onClick={openLetsTalk}
@@ -87,8 +87,8 @@ const Home = () => {
                                 <span className="material-icons text-2xl" aria-hidden="true">account_balance</span>
                             </div>
                             <div>
-                                <h3 className="font-black text-slate-900 uppercase tracking-tight">150+ UK Lenders</h3>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Extensive Panel Access</p>
+                                <h3 className="font-black text-slate-900 uppercase tracking-tight">Panel of Lenders</h3>
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Extensive Access</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-6 group">
@@ -96,8 +96,8 @@ const Home = () => {
                                 <span className="material-icons text-2xl" aria-hidden="true">public</span>
                             </div>
                             <div>
-                                <h3 className="font-black text-slate-900 uppercase tracking-tight">Whole of Market</h3>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Unbiased Selection</p>
+                                <h3 className="font-black text-slate-900 uppercase tracking-tight">Expert Advice</h3>
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">customer-focused, innovative solutions</p>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                         {[
                             { title: 'First-Time Buyers', icon: 'key', desc: 'Navigate your first purchase with confidence. We explain the process and find the best high-LTV rates.' },
-                            { title: 'Remortgaging', icon: 'sync', desc: 'Lower your monthly payments or release equity. We\'ll compare your current deal against the whole market.' },
+                            { title: 'Remortgaging', icon: 'sync', desc: 'Lower your monthly payments or release equity. We\'ll compare your current deal against a panel of lenders.' },
                             { title: 'Life Protection', icon: 'shield', desc: 'Protect your family and your home. Expert advice on life insurance, critical illness, and income protection.' }
                         ].map((card, i) => (
                             <motion.div
@@ -158,7 +158,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
                         {[
                             { num: '01', title: 'Initial Chat', desc: 'A free, no-obligation discussion about your goals and financial situation.' },
-                            { num: '02', title: 'Market Search', desc: 'We scan over 150 lenders to find the specific products that fit your criteria.' },
+                            { num: '02', title: 'Market Search', desc: 'We scan our panel of lenders to find the specific products that fit your criteria.' },
                             { num: '03', title: 'Application', desc: 'We handle the paperwork and liaise with lenders and solicitors on your behalf.' },
                             { num: '04', title: 'Completion', desc: 'Welcome to your new home. We stay with you until the keys are in your hand.' }
                         ].map((step, i) => (

@@ -7,6 +7,8 @@ import Contact from './pages/Contact';
 import ServiceDetail from './components/ServiceDetail';
 import MortgageOverview from './pages/MortgageOverview';
 import ProtectionOverview from './pages/ProtectionOverview';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 import { serviceData } from './utils/serviceData';
 
 import axios from 'axios';
@@ -52,6 +54,8 @@ function App() {
           {/* Overviews */}
           <Route path="/mortgages" element={<MortgageOverview />} />
           <Route path="/protection" element={<ProtectionOverview />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
         </Routes>
       </Layout>
     </Router>
