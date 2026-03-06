@@ -20,25 +20,17 @@ const Layout = ({ children }) => {
         isSchedulerOpen, closeScheduler
     } = useModals();
 
-    const isCleanPath = location.pathname.startsWith('/admin') ||
-        location.pathname.startsWith('/insurance-assessment') ||
-        location.pathname.startsWith('/insurance-client-questionnaire');
-
     return (
         <div className="min-h-screen flex flex-col pt-0 bg-white selection:bg-primary/20">
-            {!isCleanPath && (
-                <>
-                    <GetStartedModal isOpen={isGetStartedOpen} onClose={closeGetStarted} />
-                    <LetsTalkModal isOpen={isLetsTalkOpen} onClose={closeLetsTalk} />
-                    <SchedulerModal isOpen={isSchedulerOpen} onClose={closeScheduler} />
-                    <StickyBookingButton />
-                    <ReviewToast />
-                    <div className="sticky top-0 z-[60]">
-                        <Navbar />
-                        <InterestRateScroller />
-                    </div>
-                </>
-            )}
+            <GetStartedModal isOpen={isGetStartedOpen} onClose={closeGetStarted} />
+            <LetsTalkModal isOpen={isLetsTalkOpen} onClose={closeLetsTalk} />
+            <SchedulerModal isOpen={isSchedulerOpen} onClose={closeScheduler} />
+            <StickyBookingButton />
+            <ReviewToast />
+            <div className="sticky top-0 z-[60]">
+                <Navbar />
+                <InterestRateScroller />
+            </div>
 
             <main className="flex-grow">
                 <AnimatePresence mode="wait">
@@ -54,12 +46,8 @@ const Layout = ({ children }) => {
                 </AnimatePresence>
             </main>
 
-            {!isCleanPath && (
-                <>
-                    <Chatbot />
-                    <Footer />
-                </>
-            )}
+            <Chatbot />
+            <Footer />
         </div>
     );
 };

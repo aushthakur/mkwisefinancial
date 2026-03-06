@@ -33,38 +33,45 @@ function App() {
 
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+      <Routes>
+        {/* Isolated Routes (No Header/Footer/Chatbot) */}
+        <Route path="/insurance-assessment" element={<InsuranceAssessment />} />
+        <Route path="/insurance-client-questionnaire" element={<InsuranceAssessment />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
 
-          {/* Mortgages */}
-          <Route path="/mortgages/first-time-buyer" element={<ServiceWrapper id="first-time-buyer" />} />
-          <Route path="/mortgages/remortgaging" element={<ServiceWrapper id="remortgaging" />} />
-          <Route path="/mortgages/buy-to-let" element={<ServiceWrapper id="buy-to-let" />} />
-          <Route path="/mortgages/shared-ownership" element={<ServiceWrapper id="shared-ownership" />} />
-          <Route path="/mortgages/bad-credit" element={<ServiceWrapper id="bad-credit" />} />
-          <Route path="/mortgages/high-net-worth" element={<ServiceWrapper id="high-net-worth" />} />
+        {/* Global Layout Routes */}
+        <Route path="/*" element={
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
 
-          {/* Protection */}
-          <Route path="/protection/life-insurance" element={<ServiceWrapper id="life-insurance" />} />
-          <Route path="/protection/critical-illness" element={<ServiceWrapper id="critical-illness" />} />
-          <Route path="/protection/income-protection" element={<ServiceWrapper id="income-protection" />} />
-          <Route path="/protection/mortgage-protection" element={<ServiceWrapper id="mortgage-protection" />} />
-          <Route path="/protection/buildings-contents" element={<ServiceWrapper id="buildings-contents" />} />
+              {/* Mortgages */}
+              <Route path="/mortgages/first-time-buyer" element={<ServiceWrapper id="first-time-buyer" />} />
+              <Route path="/mortgages/remortgaging" element={<ServiceWrapper id="remortgaging" />} />
+              <Route path="/mortgages/buy-to-let" element={<ServiceWrapper id="buy-to-let" />} />
+              <Route path="/mortgages/shared-ownership" element={<ServiceWrapper id="shared-ownership" />} />
+              <Route path="/mortgages/bad-credit" element={<ServiceWrapper id="bad-credit" />} />
+              <Route path="/mortgages/high-net-worth" element={<ServiceWrapper id="high-net-worth" />} />
 
-          {/* Overviews */}
-          <Route path="/mortgages" element={<MortgageOverview />} />
-          <Route path="/protection" element={<ProtectionOverview />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/insurance-assessment" element={<InsuranceAssessment />} />
-          <Route path="/insurance-client-questionnaire" element={<InsuranceAssessment />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-        </Routes>
-      </Layout>
+              {/* Protection */}
+              <Route path="/protection/life-insurance" element={<ServiceWrapper id="life-insurance" />} />
+              <Route path="/protection/critical-illness" element={<ServiceWrapper id="critical-illness" />} />
+              <Route path="/protection/income-protection" element={<ServiceWrapper id="income-protection" />} />
+              <Route path="/protection/mortgage-protection" element={<ServiceWrapper id="mortgage-protection" />} />
+              <Route path="/protection/buildings-contents" element={<ServiceWrapper id="buildings-contents" />} />
+
+              {/* Overviews */}
+              <Route path="/mortgages" element={<MortgageOverview />} />
+              <Route path="/protection" element={<ProtectionOverview />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+            </Routes>
+          </Layout>
+        } />
+      </Routes>
     </Router>
   );
 }

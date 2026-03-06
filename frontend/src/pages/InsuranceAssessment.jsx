@@ -156,8 +156,8 @@ const InsuranceAssessment = () => {
                         <div
                             onClick={() => i < step && setStep(i)}
                             className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xs transition-all border-2 cursor-pointer ${step === i ? 'bg-primary border-primary text-white shadow-xl shadow-primary/30 scale-110' :
-                                    step > i ? 'bg-slate-900 border-slate-900 text-white' :
-                                        'bg-white border-slate-100 text-slate-300'
+                                step > i ? 'bg-slate-900 border-slate-900 text-white' :
+                                    'bg-white border-slate-100 text-slate-300'
                                 }`}
                         >
                             {step > i ? <CheckCircle2 size={18} /> : i}
@@ -438,8 +438,8 @@ const InsuranceAssessment = () => {
                                                         key={condition}
                                                         onClick={() => toggleMultiSelect('healthBasics', 'familyMedicalHistory', condition)}
                                                         className={`p-4 text-left border rounded-2xl font-black uppercase text-[9px] tracking-widest transition-all ${formData.healthBasics.familyMedicalHistory.includes(condition)
-                                                                ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20'
-                                                                : 'bg-white border-slate-100 text-slate-500 hover:border-slate-300'
+                                                            ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20'
+                                                            : 'bg-white border-slate-100 text-slate-500 hover:border-slate-300'
                                                             }`}
                                                     >
                                                         {condition}
@@ -668,8 +668,8 @@ const InsuranceAssessment = () => {
                                                     setFormData({ ...formData, occupationDetails: current });
                                                 }}
                                                 className={`p-6 rounded-3xl border-2 cursor-pointer transition-all flex items-center gap-4 group ${formData.occupationDetails.includes(item)
-                                                        ? 'bg-primary border-primary text-white shadow-xl shadow-primary/20 scale-[1.02]'
-                                                        : 'bg-white border-slate-100 text-slate-600 hover:border-primary/20'
+                                                    ? 'bg-primary border-primary text-white shadow-xl shadow-primary/20 scale-[1.02]'
+                                                    : 'bg-white border-slate-100 text-slate-600 hover:border-primary/20'
                                                     }`}
                                             >
                                                 <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.occupationDetails.includes(item) ? 'border-white bg-white/20' : 'border-slate-200'}`}>
@@ -737,16 +737,6 @@ const InsuranceAssessment = () => {
                         </div>
                     </div>
                 </motion.div>
-
-                <footer className="mt-16 flex flex-col md:flex-row justify-between items-center gap-6 px-4">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <Shield size={14} className="text-slate-300" /> Authorized MKWise Advisor Access Only
-                    </p>
-                    <div className="flex gap-8">
-                        <button className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Privacy Policy</button>
-                        <button className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Legal Disclosure</button>
-                    </div>
-                </footer>
             </div>
         </div>
     );
