@@ -9,6 +9,9 @@ import MortgageOverview from './pages/MortgageOverview';
 import ProtectionOverview from './pages/ProtectionOverview';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import InsuranceAssessment from './pages/InsuranceAssessment';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 import { serviceData } from './utils/serviceData';
 
 import axios from 'axios';
@@ -56,6 +59,10 @@ function App() {
           <Route path="/protection" element={<ProtectionOverview />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/insurance-assessment" element={<InsuranceAssessment />} />
+          <Route path="/insurance-client-questionnaire" element={<InsuranceAssessment />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </Layout>
     </Router>

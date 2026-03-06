@@ -19,10 +19,10 @@ const StickyBookingButton = () => {
             >
                 <div className="flex flex-col items-start relative z-10">
                     <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors">
-                        Consult Now
+                        Seek An Advisor
                     </span>
                     <span className="text-[10px] md:text-xs font-semibold tracking-tight text-slate-700 group-hover:text-primary transition-colors">
-                        Seek a advisor
+                        Seek An Advisor
                     </span>
                 </div>
 

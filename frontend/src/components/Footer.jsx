@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-1">
                         <div className="flex items-center gap-2 mb-6">
-                            <img src={logo} alt="Mkwise Financial Logo" className="h-10 w-auto" />
+                            <img src={logo} alt="MKWise Financial Logo" className="h-14 w-auto" />
                         </div>
                         <p className="text-sm leading-relaxed mb-6">
                             Providing professional mortgage and protection advice across the United Kingdom.
@@ -47,13 +47,13 @@ const Footer = () => {
                 </div>
                 <div className="border-t border-slate-800 pt-8 text-[11px] leading-relaxed text-slate-500 uppercase tracking-tight">
                     <p className="mb-4">
-                        Mkwise Financial is an appointed representative of Connect IFA Ltd which is authorised and regulated by the Financial Conduct Authority (FCA). Our FCA Register number is 441505.
+                        MKWise Financial is an appointed representative of Connect IFA Ltd which is authorised and regulated by the Financial Conduct Authority (FCA). Our FCA Register number is 441505.
                     </p>
                     <p className="mb-4 text-white font-bold">
                         YOUR HOME MAY BE REPOSSESSED IF YOU DO NOT KEEP UP REPAYMENTS ON YOUR MORTGAGE.
                     </p>
                     <p>
-                        © {new Date().getFullYear()} Mkwise Financial. All rights reserved.
+                        © {new Date().getFullYear()} MKWise Financial. All rights reserved.
                     </p>
                 </div>
             </div>

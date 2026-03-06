@@ -12,7 +12,7 @@ export const serviceData = {
         ],
         detailContent: [
             'Navigating the UK mortgage market for the first time can be overwhelming. From understanding deposit requirements to deciphering lending criteria, there are many hurdles to clear before you get your keys.',
-            'At Mkwise Financial, we specialise in helping first-time buyers find their footing. We scan over 150 lenders to find products specifically designed for those with smaller deposits or unique financial backgrounds.',
+            'At MKWise Financial, we specialise in helping first-time buyers find their footing. We scan over 150 lenders to find products specifically designed for those with smaller deposits or unique financial backgrounds.',
             'Our team takes the time to explain every step, ensuring you understand your monthly commitments and any associated costs, so you can move into your first home with total confidence.'
         ]
     },
@@ -29,7 +29,7 @@ export const serviceData = {
         ],
         detailContent: [
             'Most homeowners stay with their current lender out of habit, often missing out on significant savings. Remortgaging is an opportunity to review your financial situation and ensure your mortgage still works for you.',
-            'Whether your current fixed-rate deal is coming to an end or you want to borrow more against your property value, we provide a whole-of-market review to compare thousands of products.',
+            'Whether your current fixed-rate deal is coming to an end or you want to borrow more against your property value, we provide a review of our panel of lenders to compare thousands of products.',
             'We handle the transition between lenders, ensuring a smooth process that saves you time and, most importantly, money.'
         ]
     },
@@ -79,7 +79,7 @@ export const serviceData = {
             'Pathways to repair your credit score'
         ],
         detailContent: [
-            'High-street banks often use automated credit scoring that quickly declines anyone with a less-than-perfect history. At Mkwise Financial, we work with specialized lenders who use manual underwriting to understand the "why" behind your history.',
+            'High-street banks often use automated credit scoring that quickly declines anyone with a less-than-perfect history. At MKWise Financial, we work with specialized lenders who use manual underwriting to understand the "why" behind your history.',
             'Whether your issues were due to a historic life event or just a few missed payments, we know which lenders are most likely to accept your application and what documentation they’ll need to see.',
             'We don’t just find you a mortgage; we provide a roadmap to improving your financial standing, often helping clients move to mainstream lenders later on.'
         ]

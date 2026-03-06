@@ -9,9 +9,9 @@ const ServiceDetail = ({ title, description, benefits, detailContent, image, ser
     return (
         <div className="font-display">
             <Helmet>
-                <title>{title} | Mkwise Financial</title>
+                <title>{title} | MKWise Financial</title>
                 <meta name="description" content={description} />
-                <meta property="og:title" content={`${title} | Mkwise Financial`} />
+                <meta property="og:title" content={`${title} | MKWise Financial`} />
                 <meta property="og:description" content={description} />
             </Helmet>
             {/* Hero Section */}
@@ -100,7 +100,7 @@ const ServiceDetail = ({ title, description, benefits, detailContent, image, ser
                                     <ul className="space-y-3">
                                         <li className="flex items-center gap-2 text-xs text-slate-300">
                                             <span className="material-icons text-primary text-sm">check_circle</span>
-                                            Whole of market access
+                                            Panel of lenders access
                                         </li>
                                         <li className="flex items-center gap-2 text-xs text-slate-300">
                                             <span className="material-icons text-primary text-sm">check_circle</span>

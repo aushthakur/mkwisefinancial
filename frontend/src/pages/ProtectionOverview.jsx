@@ -28,7 +28,7 @@ const ProtectionOverview = () => {
     return (
         <div className="font-display bg-white min-h-screen">
             <Helmet>
-                <title>Protection Solutions | Mkwise Financial Advice</title>
+                <title>Protection Solutions | MKWise Financial Advice</title>
                 <meta name="description" content="Secure your financial resilience with expert life protection advice. From life insurance to critical illness, we help you protect what matters most." />
             </Helmet>
             {/* Hero Section */}

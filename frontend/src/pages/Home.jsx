@@ -11,8 +11,8 @@ const Home = () => {
     return (
         <div className="font-display bg-white min-h-screen">
             <Helmet>
-                <title>Mkwise Financial | Expert Mortgage & Protection Advice</title>
-                <meta name="description" content="Expert UK mortgage and protection advice. From first-time buyers to remortgaging and life insurance, Mkwise Financial finds you the best deals." />
+                <title>MKWise Financial | Expert Mortgage & Protection Advice</title>
+                <meta name="description" content="Expert UK mortgage and protection advice. From first-time buyers to remortgaging and life insurance, MKWise Financial finds you the best deals." />
             </Helmet>
             {/* Hero Section */}
             <header className="relative pt-32 pb-48 overflow-hidden bg-slate-900">

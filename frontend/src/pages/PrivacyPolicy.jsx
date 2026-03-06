@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
                             1. Introduction
                         </h2>
                         <p>
-                            At Mkwise Financial, we are committed to protecting and respecting your privacy. This policy explains how we collect, use, and safeguard your personal information in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
+                            At MKWise Financial, we are committed to protecting and respecting your privacy. This policy explains how we collect, use, and safeguard your personal information in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
                         </p>
                     </section>
 

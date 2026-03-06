@@ -9,7 +9,9 @@ const SchedulerModal = ({ isOpen, onClose }) => {
     React.useEffect(() => {
         if (isOpen && ghlCalendarUrl) {
             setLoading(true);
-            const timer = setTimeout(() => setLoading(false), 10000); // 10s fallback
+            // No arbitrary timeout needed, onLoad will handle it. 
+            // We just keep a fail-safe of 5s instead of 10s for poor connections.
+            const timer = setTimeout(() => setLoading(false), 5000);
             return () => clearTimeout(timer);
         }
     }, [isOpen, ghlCalendarUrl]);

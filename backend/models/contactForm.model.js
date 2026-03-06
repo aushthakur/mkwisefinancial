@@ -13,13 +13,13 @@ const contactFormSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    message: {
+    status: {
         type: String,
-        required: true
+        default: 'New'
     },
-    serviceType: {
-        type: String,
-        default: 'General Inquiry'
+    metadata: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
     },
     createdAt: {
         type: Date,

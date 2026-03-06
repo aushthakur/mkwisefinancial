@@ -31,7 +31,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
                     <Link to="/" className="flex items-center gap-2">
-                        <img src={logo} alt="Mkwise Financial Logo" className="h-12 w-auto" />
+                        <img src={logo} alt="MKWise Financial Logo" className="h-16 w-auto" />
                     </Link>
 
                     <div className="hidden md:flex items-center gap-8">

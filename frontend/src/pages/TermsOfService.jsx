@@ -26,7 +26,7 @@ const TermsOfService = () => {
                             1. Our Advisory Service
                         </h2>
                         <p>
-                            Mkwise Financial provides professional mortgage and protection advice. We are an Appointed Representative of Connect IFA Ltd, which is authorised and regulated by the Financial Conduct Authority (FCA).
+                            MKWise Financial provides professional mortgage and protection advice. We are an Appointed Representative of Connect IFA Ltd, which is authorised and regulated by the Financial Conduct Authority (FCA).
                         </p>
                     </section>
 
@@ -36,7 +36,7 @@ const TermsOfService = () => {
                             2. Scope of Advice
                         </h2>
                         <p>
-                            We offer advice based on a comprehensive panel of lenders and insurers. While we cover a significant portion of the market, our services do not constitute "whole of market" coverage as we work within our network's approved panel.
+                            We offer advice based on a comprehensive panel of lenders and insurers. While we cover a significant portion of the market, our services are based on our network's approved panel.
                         </p>
                     </section>
 
@@ -56,7 +56,7 @@ const TermsOfService = () => {
                             3. Fees and Charges
                         </h2>
                         <p>
-                            We will provide you with a Key Facts Illustration (KFI) or European Standardised Information Sheet (ESIS) which details the costs associated with any mortgage or protection product we recommend. Any fees payable to Mkwise Financial for our services will be discussed and agreed upon before we proceed with an application.
+                            We will provide you with a Key Facts Illustration (KFI) or European Standardised Information Sheet (ESIS) which details the costs associated with any mortgage or protection product we recommend. Any fees payable to MKWise Financial for our services will be discussed and agreed upon before we proceed with an application.
                         </p>
                     </section>
 

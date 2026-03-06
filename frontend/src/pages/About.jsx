@@ -7,13 +7,13 @@ const About = () => {
     return (
         <div className="font-inter">
             <Helmet>
-                <title>About Mkwise Financial | Expert Mortgage & Protection Advice</title>
-                <meta name="description" content="Learn about Mkwise Financial, our mission, values, and why clients trust us for mortgage and protection advice in the UK." />
+                <title>About MKWise Financial | Expert Mortgage & Protection Advice</title>
+                <meta name="description" content="Learn about MKWise Financial, our mission, values, and why clients trust us for mortgage and protection advice in the UK." />
             </Helmet>
             {/* Header */}
             <section className="bg-slate-50 py-24">
                 <div className="max-w-7xl mx-auto px-4 text-center">
-                    <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 mb-6">About Mkwise Financial</h1>
+                    <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 mb-6">About MKWise Financial</h1>
                     <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed text-center">
                         We are a dedicated team of mortgage and protection specialists based in the UK, committed to providing transparent, expert advice to help you secure your financial future.
                     </p>

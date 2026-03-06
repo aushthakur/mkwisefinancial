@@ -239,7 +239,7 @@ const Chatbot = () => {
                     {/* Disclaimer */}
                     <div className="px-4 py-2 bg-amber-50 border-t border-amber-100">
                         <p className="text-[9px] text-amber-700 font-bold leading-tight">
-                            AI-generated guidance only. For regulated advice, speak to an FCA authorised advisor.
+                            AI-generated guidance only. For regulated advice, speak to a FCA authorised advisor.
                         </p>
                     </div>
 

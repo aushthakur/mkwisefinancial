@@ -61,13 +61,13 @@ const Contact = () => {
     return (
         <div className="min-h-screen bg-[#f8f9fb] font-display flex flex-col">
             <Helmet>
-                <title>Contact Mkwise Financial | Expert Mortgage & Protection Advice</title>
-                <meta name="description" content="Speak to a qualified Mkwise Financial advisor today. Free, no-obligation mortgage and protection advice tailored to your goals." />
+                <title>Contact MKWise Financial | Expert Mortgage & Protection Advice</title>
+                <meta name="description" content="Speak to a qualified MKWise Financial advisor today. Free, no-obligation mortgage and protection advice tailored to your goals." />
             </Helmet>
             {/* Minimal Header */}
             <nav className="px-6 py-6 flex justify-between items-center bg-white border-b border-gray-100">
                 <Link to="/" className="flex items-center gap-2">
-                    <img src={logo} alt="Mkwise Financial Logo" className="h-10 w-auto" />
+                    <img src={logo} alt="MKWise Financial Logo" className="h-10 w-auto" />
                 </Link>
                 <Link to="/" className="text-sm font-medium text-slate-600 hover:text-primary flex items-center gap-1">
                     <ArrowLeft size={16} /> Back to Home
@@ -203,7 +203,7 @@ const Contact = () => {
                         <Link to="/contact" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">Terms of Business</Link>
                     </div>
                     <p className="text-[10px] text-slate-400 leading-relaxed mb-8">
-                        Mkwise Financial is authorised and regulated by the Financial Conduct Authority (FCA). Our registration can be verified on the Financial Services Register under reference number [Placeholder].
+                        MKWise Financial is authorised and regulated by the Financial Conduct Authority (FCA). Our registration can be verified on the Financial Services Register under reference number [Placeholder].
                     </p>
                     <div className="bg-slate-50 border border-gray-100 rounded p-6">
                         <p className="text-[10px] font-bold text-slate-900 mb-2 uppercase tracking-widest">Important Risk Warning</p>

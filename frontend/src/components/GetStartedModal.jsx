@@ -372,7 +372,7 @@ Source: ${formData.source || 'Not specified'}
                                     <input required type="checkbox" name="termsAccepted" checked={formData.termsAccepted} onChange={handleInputChange} className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all cursor-pointer" />
                                 </div>
                                 <span className="text-sm text-slate-500 font-medium leading-relaxed group-hover:text-slate-700 transition-colors">
-                                    I agree to the <span className="text-primary font-bold underline underline-offset-4">terms & conditions</span>. I agree to receive communications regrading my enquiry.
+                                    I agree to the <a href="/terms-of-service" target="_blank" className="text-primary font-bold underline underline-offset-4">terms & conditions</a>. I agree to receive communications regrading my enquiry.
                                 </span>
                             </label>
                         </div>

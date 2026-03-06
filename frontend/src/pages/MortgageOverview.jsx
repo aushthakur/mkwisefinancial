@@ -66,8 +66,8 @@ const MortgageOverview = () => {
     return (
         <div className="font-display bg-white min-h-screen">
             <Helmet>
-                <title>Mortgage Solutions | Mkwise Financial Advice</title>
-                <meta name="description" content="Discover unbiased, whole-of-market mortgage solutions. From first-time buyers to equity release, Mkwise Financial finds you the best deals." />
+                <title>Mortgage Solutions | MKWise Financial Advice</title>
+                <meta name="description" content="Discover unbiased, whole-of-market mortgage solutions. From first-time buyers to equity release, MKWise Financial finds you the best deals." />
             </Helmet>
             <header className="py-32 bg-white text-center">
                 <div className="max-w-4xl mx-auto px-6">
@@ -79,7 +79,7 @@ const MortgageOverview = () => {
                         <span className="text-primary italic">Expertly Tailored.</span>
                     </h1>
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium">
-                        Mkwise Financial provides professional, whole-of-market advice to help you secure the best mortgage terms in the UK market.
+                        MKWise Financial provides professional, whole-of-market advice to help you secure the best mortgage terms in the UK market.
                     </p>
                 </div>
             </header>

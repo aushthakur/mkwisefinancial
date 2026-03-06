@@ -89,7 +89,7 @@ const LetsTalkModal = ({ isOpen, onClose }) => {
                             <CheckCircle className="text-white" size={14} />
                         </div>
                         <p className="text-[10px] text-slate-400 leading-relaxed font-black uppercase tracking-tight">
-                            Mkwise Financial is authorized and regulated by the Financial Conduct Authority (FCA). Your home may be repossessed if you do not keep up repayments.
+                            MKWise Financial is authorized and regulated by the Financial Conduct Authority (FCA). Your home may be repossessed if you do not keep up repayments.
                         </p>
                     </div>
                 </div>
