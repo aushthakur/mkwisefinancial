@@ -4,52 +4,84 @@ import { Star, MessageSquare, ExternalLink, ShieldCheck, Quote } from 'lucide-re
 
 const REVIEWS = [
     {
-        name: "David Richardson",
+        name: "Mina Brandford",
         role: "Homeowner",
-        text: "Excellent service from Priyadarshi, he got the best deal and made it so simple throughout the process. I would highly recommend him.",
+        text: "MK Wise Mortgage have been amazing throughout our remortgage process, which has been smooth and completely stress-free from beginning to completion.",
         rating: 5,
-        initials: "DR",
-        date: "2 days ago"
+        initials: "MB",
+        date: "4 months ago"
     },
     {
-        name: "Sarah Jenkins",
-        role: "Protection Client",
-        text: "MKWise Financial is brilliant in their services from start to finish. They don't just provide a one-time service, they maintain a long term relationship with their customers.",
-        rating: 5,
-        initials: "SJ",
-        date: "1 week ago"
-    },
-    {
-        name: "Amit Patel",
-        role: "BTL Investor",
-        text: "Priyadarshi had not only help answering my questions but also given useful advice about lots of DOs and DONTs. Very friendly and helpful people.",
-        rating: 5,
-        initials: "AP",
-        date: "3 days ago"
-    },
-    {
-        name: "Michael Chen",
+        name: "Samrendra Kumar",
         role: "First-Time Buyer",
-        text: "As a first-time buyer, I was overwhelmed. The team at MKWise made everything clear and found me a rate I couldn't get elsewhere. Outstanding support!",
+        text: "I just finished my mortgage with MK Wise Financials. Being a first time buyer I was a bit susceptible but they handled really well. They are very professional in their dealings.",
         rating: 5,
-        initials: "MC",
-        date: "5 days ago"
+        initials: "SK",
+        date: "3 months ago"
     },
     {
-        name: "Emma Wilson",
-        role: "Remortgage Client",
-        text: "Managed to save me over £200 a month on my mortgage switch. The process was entirely stress-free. and the communication was top-notch.",
-        rating: 5,
-        initials: "EW",
-        date: "1 day ago"
-    },
-    {
-        name: "Robert Taylor",
+        name: "Manoj Sangaraju",
         role: "Homeowner",
-        text: "Professional, transparent, and incredibly fast. They really went above and beyond to secure our mortgage under tight deadlines.",
+        text: "Excellent mortgage service from start to finish. The process was smooth, transparent, and stress-free. Everything was clearly explained, and I received great guidance at every step.",
         rating: 5,
-        initials: "RT",
-        date: "4 days ago"
+        initials: "MS",
+        date: "a month ago"
+    },
+    {
+        name: "Ritesh Agrawal",
+        role: "Homeowner",
+        text: "Support from Gurpreet & MK Wise team was great during my fist home mortgage process. Whole process was smooth and well communicated in advance.",
+        rating: 5,
+        initials: "RA",
+        date: "4 months ago"
+    },
+    {
+        name: "Prasoon K",
+        role: "Homeowner",
+        text: "MK Wise Mortgage were superb in helping me secure the best mortgage deal. Gurpreet was incredible- patient, highly capable in handling complex cases, and extremely attentive.",
+        rating: 5,
+        initials: "PK",
+        date: "9 months ago"
+    },
+    {
+        name: "Johnny Lawrence",
+        role: "BTL Investor",
+        text: "MK Wise have been brilliant in arranging a mortgage for our BTL property. They sourced out the best deal and their fee was very competitive.",
+        rating: 5,
+        initials: "JL",
+        date: "7 months ago"
+    },
+    {
+        name: "Sandeep Singh",
+        role: "Homeowner",
+        text: "I recently worked with Mkwise Financial and their team to secure a mortgage, and I couldn't be more impressed with the level of service provided.",
+        rating: 5,
+        initials: "SS",
+        date: "a year ago"
+    },
+    {
+        name: "Santosh Choudhary",
+        role: "Homeowner",
+        text: "Recently, I have taken remortgage services from MKWise Financial Ltd. It was an absolute pleasure to go through detailed information and guidance provided by them.",
+        rating: 5,
+        initials: "SC",
+        date: "a year ago"
+    },
+    {
+        name: "Ratnakar Sinha",
+        role: "Homeowner",
+        text: "This is the 2nd time I remortgaged through MKWise. Brilliant service as the previous one. Thanks to Gurpreet and team.",
+        rating: 5,
+        initials: "RS",
+        date: "9 months ago"
+    },
+    {
+        name: "Vipul Lakhani",
+        role: "Homeowner",
+        text: "MKWise made the mortgage process smooth and stress-free. Their expertise and clear communication were invaluable. Highly recommend for anyone looking for expert advice.",
+        rating: 5,
+        initials: "VL",
+        date: "a year ago"
     }
 ];
 

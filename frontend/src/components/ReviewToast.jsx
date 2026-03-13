@@ -4,28 +4,34 @@ import { Star, X } from 'lucide-react';
 
 const REVIEWS = [
     {
-        name: "David Richardson",
-        text: "Excellent service from Priyadarshi, he got the best deal and made it so simple.",
+        name: "Mina Brandford",
+        text: "MK Wise Mortgage have been amazing throughout our remortgage process.",
         rating: 5,
-        time: "2 days ago"
+        time: "4 months ago"
     },
     {
-        name: "Sarah Jenkins",
-        text: "MKWise Financial is brilliant! They maintain a long term relationship with customers.",
+        name: "Samrendra Kumar",
+        text: "Being a first time buyer I was a bit susceptible but they handled really well.",
         rating: 5,
-        time: "1 week ago"
+        time: "3 months ago"
     },
     {
-        name: "Amit Patel",
-        text: "Priyadarshi gave useful advice about lots of DOs and DONTs. Very friendly.",
+        name: "Manoj Sangaraju",
+        text: "Excellent mortgage service from start to finish. Smooth and transparent.",
         rating: 5,
-        time: "3 days ago"
+        time: "a month ago"
     },
     {
-        name: "Michael Thompson",
-        text: "Proactive in giving regular updates on finding a right and suitable mortgage.",
+        name: "Ritesh Agrawal",
+        text: "Support from Gurpreet & MK Wise team was great during my fist home mortgage.",
         rating: 5,
-        time: "5 days ago"
+        time: "4 months ago"
+    },
+    {
+        name: "Prasoon K",
+        text: "Gurpreet was incredible- patient, highly capable in handling complex cases.",
+        rating: 5,
+        time: "9 months ago"
     }
 ];
 
