@@ -45,6 +45,20 @@ const ReferralPage = () => {
             <Helmet>
                 <title>Refer a Friend | MKWise Financial</title>
                 <meta name="description" content="Generate a unique referral link to help your friends and family get expert mortgage and protection advice." />
+                
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={window.location.href} />
+                <meta property="og:title" content="Refer a Friend | MKWise Financial" />
+                <meta property="og:description" content="Help your friends and family get expert mortgage and protection advice with MKWise Financial." />
+                <meta property="og:image" content={`${window.location.origin}/og-referral.png`} />
+
+                {/* Twitter */}
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:url" content={window.location.href} />
+                <meta property="twitter:title" content="Refer a Friend | MKWise Financial" />
+                <meta property="twitter:description" content="Help your friends and family get expert mortgage and protection advice with MKWise Financial." />
+                <meta property="twitter:image" content={`${window.location.origin}/og-referral.png`} />
             </Helmet>
 
             <div className="max-w-3xl mx-auto">

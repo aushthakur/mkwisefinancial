@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ShieldCheck, ArrowRight, MessageSquare, Phone, CheckCircle, Smartphone } from 'lucide-react';
 import logo from '../assets/logo.png';
+import { Helmet } from 'react-helmet-async';
 
 const ReferralLanding = () => {
     const { code } = useParams();
@@ -78,6 +79,25 @@ const ReferralLanding = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Helmet>
+                <title>You've been referred to MKWise Financial</title>
+                <meta name="description" content={`${referralData?.referrerName} has recommended MKWise Financial for your mortgage and protection needs.`} />
+                
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={window.location.href} />
+                <meta property="og:title" content="You've been referred to MKWise Financial" />
+                <meta property="og:description" content={`${referralData?.referrerName} has recommended MKWise Financial for your mortgage and protection needs.`} />
+                <meta property="og:image" content={`${window.location.origin}/og-referral-landing.png`} />
+
+                {/* Twitter */}
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:url" content={window.location.href} />
+                <meta property="twitter:title" content="You've been referred to MKWise Financial" />
+                <meta property="twitter:description" content={`${referralData?.referrerName} has recommended MKWise Financial for your mortgage and protection needs.`} />
+                <meta property="twitter:image" content={`${window.location.origin}/og-referral-landing.png`} />
+            </Helmet>
+
             <nav className="p-6 bg-white border-b border-gray-100 flex justify-center sm:justify-between items-center">
                  <img src={logo} alt="MKWise" className="h-10 w-auto" />
                  <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-widest">
