@@ -13,6 +13,9 @@ import InsuranceAssessment from './pages/InsuranceAssessment';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import { serviceData } from './utils/serviceData';
+import MortgageCalculator from './components/calculators/MortgageCalculator/MortgageCalculator';
+import ReferralPage from './pages/ReferralPage';
+import ReferralLanding from './pages/ReferralLanding';
 
 import axios from 'axios';
 
@@ -39,6 +42,7 @@ function App() {
         <Route path="/insurance-client-questionnaire" element={<InsuranceAssessment />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/referral/:code" element={<ReferralLanding />} />
 
         {/* Global Layout Routes */}
         <Route path="/*" element={
@@ -68,6 +72,8 @@ function App() {
               <Route path="/protection" element={<ProtectionOverview />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/tools/mortgage-calculator" element={<MortgageCalculator />} />
+              <Route path="/tools/referral" element={<ReferralPage />} />
             </Routes>
           </Layout>
         } />

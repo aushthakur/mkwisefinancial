@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
 app.use('/api/contact', require('./routes/contactForm.routes'));
 app.use('/api/chatbot', require('./routes/chatbot.routes'));
 app.use('/api/insurance-assessment', require('./routes/insuranceAssessment.routes'));
+app.use('/api/referrals', require('./routes/referral.routes'));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

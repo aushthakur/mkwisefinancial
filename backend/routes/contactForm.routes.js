@@ -41,6 +41,7 @@ Message: ${message}
 <p><strong>Email:</strong> ${email}</p>
 <p><strong>Phone:</strong> ${phone}</p>
 <p><strong>Service:</strong> ${serviceType}</p>
+${req.body.referralCode ? `<p><strong>Referral Code:</strong> ${req.body.referralCode}</p>` : ''}
 <hr />
 <p><strong>Message:</strong></p>
 <pre>${message}</pre>

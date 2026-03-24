@@ -62,17 +62,32 @@ const itemVariants = {
     }
 };
 
-const GetStartedModal = ({ isOpen, onClose }) => {
+const GetStartedModal = ({ isOpen, onClose, initialData }) => {
     const [step, setStep] = useState(1);
     const [direction, setDirection] = useState(1);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        intent: '', primaryUse: '', purchasedBefore: '', depositReady: '',
-        mortgageAmount: '', propertyValue: '', rentalPotential: '0',
+        intent: initialData?.intent || '', 
+        primaryUse: '', purchasedBefore: '', depositReady: '',
+        mortgageAmount: initialData?.mortgageAmount || '', 
+        propertyValue: initialData?.propertyValue || '', 
+        rentalPotential: '0',
         callTime: '', timeline: '', maritalStatus: '', dependents: '',
         income: '', employmentType: '', name: '', email: '',
         phone: '', termsAccepted: false, source: ''
     });
+
+    // Reset or update form data when initialData changes or modal opens
+    React.useEffect(() => {
+        if (isOpen && initialData) {
+            setFormData(prev => ({
+                ...prev,
+                ...initialData
+            }));
+            // If we have initial data, maybe jump to a specific step?
+            // For now, let's just stay at step 1 but have fields filled.
+        }
+    }, [isOpen, initialData]);
 
     if (!isOpen) return null;
 

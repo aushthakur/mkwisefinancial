@@ -5,7 +5,7 @@ import {
     ChevronRight, MoreVertical, LogOut, CheckCircle2,
     Clock, Archive, RefreshCw, AlertCircle, FileText,
     Mail, Phone, MessageSquare, Zap, BarChart3, LayoutGrid,
-    Shield, Briefcase, Activity, Landmark
+    Shield, Briefcase, Activity, Landmark, Share2, Copy, CheckCircle, Users
 } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('assessments'); // 'assessments', 'leads', or 'reports'
     const [assessments, setAssessments] = useState([]);
     const [leads, setLeads] = useState([]);
+    const [referrals, setReferrals] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
@@ -34,15 +35,17 @@ const AdminDashboard = () => {
             const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
             const headers = { Authorization: `Basic ${token}` };
 
-            const [assessmentsRes, leadsRes] = await Promise.all([
+            const [assessmentsRes, leadsRes, referralsRes] = await Promise.all([
                 axios.get(`${apiUrl}/api/insurance-assessment`, { headers }),
-                axios.get(`${apiUrl}/api/contact`, { headers })
+                axios.get(`${apiUrl}/api/contact`, { headers }),
+                axios.get(`${apiUrl}/api/referrals/admin/all`, { headers })
             ]);
 
             setAssessments(assessmentsRes.data);
             setLeads(leadsRes.data);
+            setReferrals(referralsRes.data);
 
-            updateFiltered(activeTab, assessmentsRes.data, leadsRes.data, searchTerm);
+            updateFiltered(activeTab, assessmentsRes.data, leadsRes.data, referralsRes.data, searchTerm);
         } catch (err) {
             setError('Failed to fetch data. Session may have expired.');
             if (err.response?.status === 401) {
@@ -63,20 +66,30 @@ const AdminDashboard = () => {
         setSelected(null);
     }, [activeTab]);
 
-    const updateFiltered = (tab, allAssessments, allLeads, term) => {
+    const updateFiltered = (tab, allAssessments, allLeads, allReferrals, term) => {
         if (tab === 'reports') return;
-        let source = tab === 'assessments' ? allAssessments : allLeads;
+        let source;
+        if (tab === 'assessments') source = allAssessments;
+        else if (tab === 'leads') source = allLeads;
+        else source = allReferrals;
+
         const results = source.filter(item => {
             if (tab === 'assessments') {
                 return (
                     `${item.primaryApplicant?.firstName} ${item.primaryApplicant?.lastName}`.toLowerCase().includes(term.toLowerCase()) ||
                     item.contact?.email?.toLowerCase().includes(term.toLowerCase())
                 );
-            } else {
+            } else if (tab === 'leads') {
                 return (
                     item.name?.toLowerCase().includes(term.toLowerCase()) ||
                     item.email?.toLowerCase().includes(term.toLowerCase()) ||
                     (item.serviceType && item.serviceType.toLowerCase().includes(term.toLowerCase()))
+                );
+            } else {
+                return (
+                    item.clientName?.toLowerCase().includes(term.toLowerCase()) ||
+                    item.referrerName?.toLowerCase().includes(term.toLowerCase()) ||
+                    item.referralCode?.toLowerCase().includes(term.toLowerCase())
                 );
             }
         });
@@ -84,8 +97,8 @@ const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        updateFiltered(activeTab, assessments, leads, searchTerm);
-    }, [searchTerm, activeTab, assessments, leads]);
+        updateFiltered(activeTab, assessments, leads, referrals, searchTerm);
+    }, [searchTerm, activeTab, assessments, leads, referrals]);
 
     const updateStatus = async (id, status) => {
         try {
@@ -299,6 +312,12 @@ const AdminDashboard = () => {
                     >
                         <MessageSquare size={20} /> <span className="hidden lg:block font-black uppercase text-[10px] tracking-widest">Website Inquiries</span>
                     </button>
+                    <button
+                        onClick={() => setActiveTab('referrals')}
+                        className={`w-full flex items-center justify-center lg:justify-start gap-4 p-4 rounded-2xl transition-all ${activeTab === 'referrals' ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                    >
+                        <Share2 size={20} /> <span className="hidden lg:block font-black uppercase text-[10px] tracking-widest">Referral Links</span>
+                    </button>
 
                     <div className="pt-10 mb-4 border-t border-slate-800 hidden lg:block">
                         <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-4 ml-2">Analytics</p>
@@ -325,14 +344,16 @@ const AdminDashboard = () => {
                         <div>
                             <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block">MKWise Intelligence</span>
                             <h1 className="text-4xl lg:text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none">
-                                {activeTab === 'assessments' ? 'Insurance Vault' : activeTab === 'leads' ? 'Website Stream' : 'Reporting Core'}
+                                {activeTab === 'assessments' ? 'Insurance Vault' : activeTab === 'leads' ? 'Website Stream' : activeTab === 'referrals' ? 'Referral Network' : 'Reporting Core'}
                             </h1>
                             <p className="text-slate-500 font-medium text-lg mt-4 max-w-xl">
                                 {activeTab === 'assessments'
                                     ? 'Detailed pre-assessment data from insurance applicants.'
                                     : activeTab === 'leads'
                                         ? 'Public contact inquiries, calendar bookings, and "Get Started" questionnaires.'
-                                        : 'Real-time performance metrics and lead distribution analytics.'}
+                                        : activeTab === 'referrals'
+                                            ? 'Track and manage partner referrals and generated secure links.'
+                                            : 'Real-time performance metrics and lead distribution analytics.'}
                             </p>
                         </div>
                         <div className="flex items-center gap-4">
@@ -353,6 +374,7 @@ const AdminDashboard = () => {
                                 {[
                                     { label: 'Total Volume', value: assessments.length + leads.length, icon: <LayoutGrid size={22} />, color: 'bg-slate-50 text-slate-900' },
                                     { label: 'Insurance Data', value: assessments.length, icon: <FileText size={22} />, color: 'bg-blue-50 text-primary' },
+                                    { label: 'Referrals Trace', value: referrals.length, icon: <Share2 size={22} />, color: 'bg-indigo-50 text-indigo-600' },
                                     { label: 'Website Leads', value: leads.length, icon: <MessageSquare size={22} />, color: 'bg-emerald-50 text-emerald-600' },
                                     { label: 'New Action', value: assessments.filter(a => a.status === 'New').length + leads.filter(l => (l.status || 'New') === 'New').length, icon: <Zap size={22} />, color: 'bg-amber-50 text-amber-600' },
                                 ].map((stat, i) => (
@@ -403,9 +425,9 @@ const AdminDashboard = () => {
                                         <table className="w-full text-left border-collapse">
                                             <thead>
                                                 <tr className="bg-[#fcfdfe] border-b border-slate-50">
-                                                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Customer Entity</th>
-                                                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Service / Type</th>
-                                                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Contact Specs</th>
+                                                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{activeTab === 'referrals' ? 'Referrer' : 'Customer Entity'}</th>
+                                                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{activeTab === 'referrals' ? 'Target Client' : 'Service / Type'}</th>
+                                                    <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{activeTab === 'referrals' ? 'Tracking Code' : 'Contact Specs'}</th>
                                                     <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">Status</th>
                                                     <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">View</th>
                                                 </tr>
@@ -417,11 +439,15 @@ const AdminDashboard = () => {
                                                             <td className="px-10 py-8">
                                                                 <div className="flex items-center gap-4">
                                                                     <div className="w-12 h-12 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all shadow-sm">
-                                                                        {activeTab === 'assessments' ? <Briefcase size={20} /> : <User size={20} />}
+                                                                        {activeTab === 'assessments' ? <Briefcase size={20} /> : activeTab === 'referrals' ? <Share2 size={20} /> : <User size={20} />}
                                                                     </div>
                                                                     <div>
-                                                                        <p className="font-black text-slate-900 tracking-tight text-base truncate max-w-[200px]">{activeTab === 'assessments' ? `${item.primaryApplicant?.firstName} ${item.primaryApplicant?.lastName}` : item.name}</p>
-                                                                        <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.1em] flex items-center gap-1.5 mt-1 transition-colors group-hover:text-primary leading-none"><Mail size={12} /> {activeTab === 'assessments' ? item.contact?.email : item.email}</p>
+                                                                        <p className="font-black text-slate-900 tracking-tight text-base truncate max-w-[200px]">
+                                                                            {activeTab === 'assessments' ? `${item.primaryApplicant?.firstName} ${item.primaryApplicant?.lastName}` : activeTab === 'referrals' ? item.referrerName : item.name}
+                                                                        </p>
+                                                                        <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.1em] flex items-center gap-1.5 mt-1 transition-colors group-hover:text-primary leading-none">
+                                                                            <Phone size={12} /> {activeTab === 'assessments' ? item.contact?.telephone : activeTab === 'referrals' ? item.referrerPhone : item.phone}
+                                                                        </p>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -433,6 +459,11 @@ const AdminDashboard = () => {
                                                                         ))}
                                                                         {item.products?.length > 1 && <span className="px-3 py-1.5 bg-slate-50 text-slate-400 text-[8px] font-black uppercase rounded-lg tracking-widest">+{item.products.length - 1} More</span>}
                                                                     </div>
+                                                                ) : activeTab === 'referrals' ? (
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className="font-black text-slate-900 text-[13px]">{item.clientName}</span>
+                                                                        <span className="text-[10px] text-slate-400 font-bold">{item.clientPhone}</span>
+                                                                    </div>
                                                                 ) : (
                                                                     <div className="flex flex-col gap-1">
                                                                         <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase rounded-lg tracking-widest w-fit">{item.serviceType || 'General'}</span>
@@ -442,7 +473,9 @@ const AdminDashboard = () => {
                                                             </td>
                                                             <td className="px-10 py-8">
                                                                 <div className="space-y-1">
-                                                                    <p className="text-xs font-black text-slate-700">{activeTab === 'assessments' ? item.contact?.telephone : item.phone}</p>
+                                                                    <p className="text-xs font-black text-slate-700 font-mono tracking-tighter">
+                                                                        {activeTab === 'referrals' ? item.referralCode : (activeTab === 'assessments' ? item.contact?.telephone : item.phone)}
+                                                                    </p>
                                                                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1"><Clock size={10} /> {new Date(item.createdAt).toLocaleDateString()}</p>
                                                                 </div>
                                                             </td>
@@ -584,6 +617,66 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))
+                        ) : activeTab === 'referrals' ? (
+                            referrals.filter(r => r._id === selected).map(item => (
+                                <div key={item._id} className="space-y-12 pb-24">
+                                    <header>
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <span className="px-3 py-1 bg-indigo-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest shadow-lg shadow-indigo-200">Referral Track</span>
+                                            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">CODE: {item.referralCode}</span>
+                                        </div>
+                                        <h2 className="text-4xl lg:text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-6">{item.clientName}</h2>
+                                        <p className="text-slate-400 font-bold uppercase text-xs tracking-widest">Referred by <span className="text-slate-900">{item.referrerName}</span></p>
+                                    </header>
+
+                                    <div className="grid grid-cols-1 gap-12">
+                                        <section className="space-y-6">
+                                            <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3"><Users size={16} className="text-indigo-500" /> Professional Bridge</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4 block">The Referrer</span>
+                                                    <h4 className="font-black text-slate-900 text-lg mb-1">{item.referrerName}</h4>
+                                                    <p className="text-primary font-bold text-sm">{item.referrerPhone}</p>
+                                                </div>
+                                                <div className="p-8 bg-indigo-50/30 rounded-[2.5rem] border border-indigo-100">
+                                                    <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4 block">The Client</span>
+                                                    <h4 className="font-black text-slate-900 text-lg mb-1">{item.clientName}</h4>
+                                                    <p className="text-indigo-600 font-bold text-sm">{item.clientPhone}</p>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section className="space-y-6">
+                                            <h3 className="text-xs font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3"><Zap size={16} className="text-amber-500" /> Tracking Metadata</h3>
+                                            <div className="bg-white border border-slate-100 rounded-3xl p-8 flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Unique Security Code</p>
+                                                    <p className="text-3xl font-black text-slate-900 font-mono tracking-tighter">{item.referralCode}</p>
+                                                </div>
+                                                <button 
+                                                    onClick={() => {
+                                                        navigator.clipboard.writeText(`${window.location.origin}/referral/${item.referralCode}`);
+                                                        alert('Link copied to clipboard');
+                                                    }}
+                                                    className="flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all shadow-lg"
+                                                >
+                                                    <Copy size={14} /> Copy Portal Link
+                                                </button>
+                                            </div>
+                                        </section>
+
+                                        <div className="p-8 bg-slate-900 text-white rounded-[2.5rem] shadow-xl">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Generation Timestamp</span>
+                                                <span className="text-[9px] font-black text-white uppercase tracking-widest">{new Date(item.createdAt).toLocaleString()}</span>
+                                            </div>
+                                            <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                                <div className="w-full h-full bg-indigo-500" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
                         ) : (
                             leads.filter(l => l._id === selected).map(item => (
                                 <div key={item._id} className="space-y-12 pb-24">
@@ -595,6 +688,9 @@ const AdminDashboard = () => {
                                         <h2 className="text-4xl lg:text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-6">{item.name}</h2>
                                         <div className="flex flex-wrap gap-2">
                                             <span className="px-4 py-2 bg-emerald-50 rounded-xl text-[9px] font-black uppercase tracking-widest text-emerald-600 border border-emerald-100 flex items-center gap-2 transition-all hover:bg-emerald-100"><Landmark size={12} /> {item.serviceType || 'Standard Service'}</span>
+                                            {item.metadata?.referralCode && (
+                                                <span className="px-4 py-2 bg-indigo-50 rounded-xl text-[9px] font-black uppercase tracking-widest text-indigo-600 border border-indigo-100 flex items-center gap-2"><Share2 size={12} /> Referral: {item.metadata.referralCode}</span>
+                                            )}
                                             {item.metadata?.isBooking && (
                                                 <span className="px-4 py-2 bg-rose-50 rounded-xl text-[9px] font-black uppercase tracking-widest text-rose-600 border border-rose-100 flex items-center gap-2"><Calendar size={12} /> Appointment Confirmed</span>
                                             )}

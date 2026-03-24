@@ -15,14 +15,14 @@ import { useLocation } from 'react-router-dom';
 const Layout = ({ children }) => {
     const location = useLocation();
     const {
-        isGetStartedOpen, closeGetStarted,
+        isGetStartedOpen, closeGetStarted, modalData,
         isLetsTalkOpen, closeLetsTalk,
         isSchedulerOpen, closeScheduler
     } = useModals();
 
     return (
         <div className="min-h-screen flex flex-col pt-0 bg-white selection:bg-primary/20">
-            <GetStartedModal isOpen={isGetStartedOpen} onClose={closeGetStarted} />
+            <GetStartedModal isOpen={isGetStartedOpen} onClose={closeGetStarted} initialData={modalData} />
             <LetsTalkModal isOpen={isLetsTalkOpen} onClose={closeLetsTalk} />
             <SchedulerModal isOpen={isSchedulerOpen} onClose={closeScheduler} />
             <StickyBookingButton />

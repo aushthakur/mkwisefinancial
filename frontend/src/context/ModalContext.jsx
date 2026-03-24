@@ -6,9 +6,16 @@ export const ModalProvider = ({ children }) => {
     const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
     const [isLetsTalkOpen, setIsLetsTalkOpen] = useState(false);
     const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+    const [modalData, setModalData] = useState(null);
 
-    const openGetStarted = () => setIsGetStartedOpen(true);
-    const closeGetStarted = () => setIsGetStartedOpen(false);
+    const openGetStarted = (data = null) => {
+        setModalData(data);
+        setIsGetStartedOpen(true);
+    };
+    const closeGetStarted = () => {
+        setIsGetStartedOpen(false);
+        setModalData(null);
+    };
 
     const openLetsTalk = () => setIsLetsTalkOpen(true);
     const closeLetsTalk = () => setIsLetsTalkOpen(false);
@@ -25,6 +32,7 @@ export const ModalProvider = ({ children }) => {
                 isGetStartedOpen,
                 openGetStarted,
                 closeGetStarted,
+                modalData,
                 isLetsTalkOpen,
                 openLetsTalk,
                 closeLetsTalk,

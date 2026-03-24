@@ -26,6 +26,11 @@ const Navbar = () => {
         { title: 'Buildings & Contents', path: '/protection/buildings-contents' },
     ];
 
+    const resources = [
+        { title: 'Mortgage Calculator', path: '/tools/mortgage-calculator' },
+        { title: 'Generate Referral Link', path: '/tools/referral' },
+    ];
+
     return (
         <nav className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100 font-display transition-all">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -83,6 +88,29 @@ const Navbar = () => {
                             </div>
                         </div>
 
+                        <div className="relative group">
+                            <button
+                                className="flex items-center text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-primary transition-colors cursor-pointer"
+                                onMouseEnter={() => setActiveDropdown('resources')}
+                            >
+                                Resources <ChevronDown className="ml-1 w-3 h-3 opacity-50" />
+                            </button>
+                            <div
+                                className={`absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white shadow-2xl rounded-lg border border-gray-100 py-4 mt-2 transition-all ${activeDropdown === 'resources' ? 'block' : 'hidden'} group-hover:block`}
+                                onMouseLeave={() => setActiveDropdown(null)}
+                            >
+                                {resources.map((item) => (
+                                    <Link
+                                        key={item.path}
+                                        to={item.path}
+                                        className="block px-6 py-2.5 text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-primary uppercase tracking-widest transition-colors"
+                                    >
+                                        {item.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
                         <Link to="/about" className="text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-primary transition-colors">About Us</Link>
                         <Link to="/contact" className="text-xs font-bold uppercase tracking-widest text-slate-600 hover:text-primary transition-colors">Contact</Link>
                     </div>
@@ -120,9 +148,9 @@ const Navbar = () => {
                         </div>
 
                         <div className="py-4 border-t border-gray-50">
-                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.25em] mb-4 block opacity-60">Protection Advice</span>
+                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.25em] mb-4 block opacity-60">Resources & Tools</span>
                             <div className="grid grid-cols-1 gap-1">
-                                {protections.map((item) => (
+                                {resources.map((item) => (
                                     <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)} className="block py-3 text-sm font-bold text-slate-600 hover:text-primary active:bg-slate-50 transition-all uppercase tracking-widest">{item.title}</Link>
                                 ))}
                             </div>
