@@ -1166,9 +1166,25 @@ export default function WebinarRegistration() {
           .mkw-faq-section { padding: 64px 16px; }
           .mkw-cta { padding: 64px 16px; }
           .mkw-hero-left { padding-top: 8px; }
-          .mkw-value-box { max-width: 100%; }
+          .mkw-value-box { max-width: 100%; padding: 14px 18px; gap: 12px; }
+          .mkw-value-price { font-size: 28px; }
+          .mkw-value-label { font-size: 10px; }
           .mkw-form-body { padding: 20px; }
           .mkw-form-card-top { padding: 22px 20px 20px; }
+          .mkw-topbar { padding: 6px 12px; }
+          .mkw-topbar-text { font-size: 10.5px; line-height: 1.45; }
+          .mkw-hero-headline { font-size: clamp(1.75rem, 5vw, 2.75rem); line-height: 1.2; }
+          .mkw-hero-sub { font-size: 14.5px; line-height: 1.6; margin-bottom: 24px; }
+          .mkw-event-details { gap: 12px; margin-bottom: 24px; }
+          .mkw-event-pill { padding: 6px 10px; font-size: 12px; }
+          .mkw-trust-bullets { margin-top: 20px; gap: 8px; }
+          .mkw-trust-bullet { font-size: 12.5px; }
+        }
+        @media (max-width: 360px) {
+          .mkw-countdown-row { gap: 4px; }
+          .mkw-count-box { width: 46px; height: 42px; }
+          .mkw-count-number { font-size: 17px; }
+          .mkw-count-sep { font-size: 14px; margin-bottom: 12px; }
         }
       `}</style>
 

@@ -343,6 +343,67 @@ const Home = () => {
                 
                 .mkw-modal-dismiss { font-size: 11px; color: rgba(255,255,255,0.3); text-align:center; margin-top:12px; cursor:pointer; }
                 .mkw-modal-dismiss:hover { color:rgba(255,255,255,0.6); }
+
+                /* Name chips inside stage overlay */
+                .mkw-chip {
+                    position: absolute;
+                    bottom: 8px;
+                    background: rgba(11,31,77,0.92);
+                    border: 1px solid rgba(255,255,255,0.15);
+                    border-radius: 4px;
+                    padding: 2px 6px;
+                    white-space: nowrap;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                    z-index: 35;
+                }
+                .mkw-chip-main {
+                    background: #D4AF37;
+                    border-color: #fff;
+                }
+                .mkw-chip span { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.9); }
+                .mkw-chip-main span { color: #0B1F4D; }
+
+                /* Hide name chips on mobile view */
+                @media (max-width: 767px) {
+                    .mkw-chip {
+                        display: none !important;
+                    }
+                }
+
+                /* Scrollable modal card on mobile */
+                .mkw-modal-card {
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                @media (max-width: 767px) {
+                    .mkw-modal-card {
+                        max-height: 95vh;
+                    }
+                }
+
+                /* Responsive speaker details list layout */
+                .mkw-speaker-details-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-top: 14px;
+                }
+                @media (max-width: 767px) {
+                    .mkw-speaker-details-list {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 8px;
+                    }
+                }
+
+                .mkw-speaker-detail-card {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 6px 10px;
+                    background: rgba(255,255,255,0.03);
+                    border-radius: 6px;
+                }
             `}</style>
             <AnimatePresence>
                 {showWebinarModal && (
@@ -362,7 +423,7 @@ const Home = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.96, y: 24 }}
                             transition={{ duration: 0.35, ease: 'easeOut' }}
-                            className="relative w-full max-w-3xl z-10 rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(11,31,77,0.6)]"
+                            className="relative w-full max-w-3xl z-10 rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(11,31,77,0.6)] mkw-modal-card"
                             style={{ background: 'linear-gradient(135deg,#0B1F4D 0%,#123C8D 100%)' }}
                         >
                             {/* Gold top bar */}
@@ -397,33 +458,45 @@ const Home = () => {
                                             {/* Gurpreet — back-left, tilted */}
                                             <div className="mkw-fig mkw-fig-gl">
                                                 <img src={gurpreetImg} alt="Gurpreet Gupta" />
+                                                <div className="mkw-chip">
+                                                    <span>Gurpreet</span>
+                                                </div>
                                             </div>
                                             
                                             {/* Mukesh — front-left */}
                                             <div className="mkw-fig mkw-fig-fl">
                                                 <img src={mukeshImg} alt="Mukesh Kumar" />
+                                                <div className="mkw-chip mkw-chip-main">
+                                                    <span>Mukesh</span>
+                                                </div>
                                             </div>
                                             
                                             {/* Nilesh — front-right */}
                                             <div className="mkw-fig mkw-fig-fr">
                                                 <img src={nileshImg} alt="Nilesh Rathod" />
+                                                <div className="mkw-chip mkw-chip-main">
+                                                    <span>Nilesh</span>
+                                                </div>
                                             </div>
                                             
                                             {/* Vignesh — back-right, tilted */}
                                             <div className="mkw-fig mkw-fig-br">
                                                 <img src={vigneshImg} alt="Vignesh Mohan" />
+                                                <div className="mkw-chip">
+                                                    <span>Vignesh</span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         {/* Detailed Speaker List below stage */}
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '14px' }}>
+                                        <div className="mkw-speaker-details-list">
                                             {[
                                                 { name: 'Mukesh Kumar', role: 'Founder, MKWise Financial' },
                                                 { name: 'Nilesh Rathod', role: 'Estate & Wills Planning Expert' },
                                                 { name: 'Gurpreet Gupta', role: 'Mortgage Advisor' },
                                                 { name: 'Vignesh Mohan', role: 'Mortgage Advisor' }
                                             ].map((s, i) => (
-                                                <div key={i} style={{ display: 'flex', flexDirection: 'column', padding: '6px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', borderLeft: i < 2 ? '2px solid #D4AF37' : '2px solid rgba(255,255,255,0.1)' }}>
+                                                <div key={i} className="mkw-speaker-detail-card" style={{ borderLeft: i < 2 ? '2px solid #D4AF37' : '2px solid rgba(255,255,255,0.1)' }}>
                                                     <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#fff' }}>{s.name}</div>
                                                     <div style={{ fontSize: '10px', color: i < 2 ? '#D4AF37' : 'rgba(255,255,255,0.5)', fontWeight: '500', marginTop: '1px' }}>{s.role}</div>
                                                 </div>

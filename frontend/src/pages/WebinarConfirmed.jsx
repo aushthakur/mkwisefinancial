@@ -338,6 +338,20 @@ export default function WebinarConfirmed() {
           font-size: 11.5px;
           color: #b0bcd4;
         }
+
+        /* ── Mobile styling ── */
+        @media (max-width: 600px) {
+          .wc-page { padding: 32px 16px 64px; }
+          .wc-card-top { padding: 28px 20px 24px; }
+          .wc-headline { font-size: clamp(1.4rem, 6vw, 1.85rem); line-height: 1.25; }
+          .wc-subtext { font-size: 13px; line-height: 1.5; }
+          .wc-cal-btn { width: calc(100% - 32px); padding: 12px 16px; font-size: 12px; margin-top: 20px; }
+          .wc-steps-card { padding: 20px 16px; }
+          .wc-step-item { padding: 10px 12px; gap: 10px; }
+          .wc-step-desc { font-size: 12px; }
+          .wc-speakers-card { padding: 20px 16px; }
+          .wc-speakers-grid { gap: 10px; }
+        }
       `}</style>
 
       <div className="wc-root">
