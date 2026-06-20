@@ -27,16 +27,18 @@ router.post('/', async (req, res) => {
     // ── 1. Create or Update Contact in GHL (V2 API) ───────────────────────────
     const ghlAccessToken = process.env.GHL_ACCESS_TOKEN || 'pit-9dfb9d81-a2a1-448a-ab4e-7cc36b670e7e';
     const locationId = '9XGJdS89KjPnK9P3CiMz';
+    const webinarTags = ['Webinar-9July', 'FirstHome-Webinar', ...(tags || [])];
 
     if (ghlAccessToken) {
         try {
-            await axios.post(
+            // Step 1a: Upsert the contact (creates new or matches existing by email/phone)
+            const upsertResponse = await axios.post(
                 'https://services.leadconnectorhq.com/contacts/upsert',
                 {
                     firstName,
                     email,
                     phone,
-                    tags: ['Webinar-9July', 'FirstHome-Webinar', ...(tags || [])],
+                    tags: webinarTags,
                     locationId: locationId,
                     source: source || 'Webinar Landing Page – 9 July 2026',
                 },
@@ -48,6 +50,38 @@ router.post('/', async (req, res) => {
                     }
                 }
             );
+
+            const contactId = upsertResponse?.data?.contact?.id;
+            const isNew = upsertResponse?.data?.traceId ? false : true;
+
+            console.log(`✅ GHL upsert successful. Contact ID: ${contactId} | New contact: ${upsertResponse?.data?.new ?? 'unknown'}`);
+
+            // Step 1b: Explicitly add tags — this ensures existing contacts also get
+            // the webinar tag applied, since upsert may not merge tags for existing records.
+            if (contactId) {
+                try {
+                    await axios.post(
+                        `https://services.leadconnectorhq.com/contacts/${contactId}/tags`,
+                        { tags: webinarTags },
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${ghlAccessToken}`,
+                                'Version': '2021-07-28',
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    );
+                    console.log(`✅ Tags [${webinarTags.join(', ')}] explicitly added to contact ${contactId}.`);
+                } catch (tagError) {
+                    console.error('⚠️  Tag-add step failed (non-blocking):', tagError.message);
+                    if (tagError.response) {
+                        console.error('Tag API response:', JSON.stringify(tagError.response.data));
+                    }
+                }
+            } else {
+                console.warn('⚠️  No contact ID returned from GHL upsert — skipping explicit tag-add.');
+            }
+
             console.log('✅ Lead created/updated in GHL via V2 API successfully.');
         } catch (ghlError) {
             console.error('❌ GHL API error:', ghlError.message);
@@ -60,15 +94,6 @@ router.post('/', async (req, res) => {
         console.warn('⚠️  GHL_ACCESS_TOKEN not configured — skipping GHL push.');
     }
 
-    // ── 2. Internal email notification (disabled — GHL handles communication) ──
-    // Email sending removed: contacts are saved to GHL (which manages follow-up)
-    // and to MongoDB. Re-enable below if direct email notification is needed.
-    /*
-    try {
-        const transporter = nodemailer.createTransport({ ... });
-        await transporter.sendMail({ ... });
-    } catch (mailError) { ... }
-    */
 
     // ── 3. Save to MongoDB / fallback file ───────────────────────────────────
     try {
