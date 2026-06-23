@@ -19,6 +19,5 @@ export const getApiUrl = () => {
   }
 
   // Fallback to the production backend URL on Render.
-  // TODO: Replace this placeholder with your exact Render backend URL if it differs
-  return 'https://mkwisefinancial-backend.onrender.com';
+  return 'https://mkwisefinancial-api.onrender.com';
 };
