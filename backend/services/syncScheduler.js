@@ -105,13 +105,17 @@ async function updateFallbackLeadStatus(email, phone, serviceType, mongoStatus, 
             // Match lead by email, phone, and serviceType
             if (l.email === email && l.phone === phone && l.serviceType === serviceType) {
                 updated = true;
-                return {
+                const updatedLead = {
                     ...l,
                     mongoSyncStatus: mongoStatus || l.mongoSyncStatus,
                     ghlSyncStatus: ghlStatus || l.ghlSyncStatus,
                     ghlRetryCount: typeof ghlRetryCount === 'number' ? ghlRetryCount : l.ghlRetryCount,
                     ghlError: ghlError !== undefined ? ghlError : l.ghlError
                 };
+                if (updatedLead.status === 'pending_sync') {
+                    updatedLead.status = 'synced';
+                }
+                return updatedLead;
             }
             return l;
         });
@@ -135,7 +139,7 @@ async function syncFallbackToMongo() {
     try {
         const data = await fs.readFile(FALLBACK_PATH, 'utf8');
         const leads = JSON.parse(data);
-        const pendingLeads = leads.filter(l => l.mongoSyncStatus === 'Pending');
+        const pendingLeads = leads.filter(l => l.mongoSyncStatus === 'Pending' || l.status === 'pending_sync');
 
         if (pendingLeads.length === 0) return;
 
