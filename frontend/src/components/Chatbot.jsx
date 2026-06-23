@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Minimize2, ExternalLink, Loader2, User, ChevronDown, Calendar } from 'lucide-react';
 import axios from 'axios';
+import { getApiUrl } from '../config';
 import { useModals } from '../context/ModalContext';
 
 const SUGGESTED_QUESTIONS = [
@@ -138,7 +139,7 @@ const Chatbot = () => {
         const history = messages.slice(1).map(m => ({ role: m.role, content: m.content }));
 
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             const { data } = await axios.post(`${apiUrl}/api/chatbot`, {
                 message: question,
                 history

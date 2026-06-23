@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import { getApiUrl } from '../config';
 
 const PAGE_VARIANTS = {
     initial: { opacity: 0, y: 10 },
@@ -89,7 +90,7 @@ const InsuranceAssessment = () => {
                 delete submitData.secondApplicant;
             }
 
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             await axios.post(`${apiUrl}/api/insurance-assessment`, submitData);
             setSubmitted(true);
             window.scrollTo(0, 0);

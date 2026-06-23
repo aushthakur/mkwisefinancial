@@ -40,6 +40,10 @@ app.use('/api/insurance-assessment', require('./routes/insuranceAssessment.route
 app.use('/api/referrals', require('./routes/referral.routes'));
 app.use('/api/webinar-register', require('./routes/webinarRegistration.routes'));
 
+const { startSyncScheduler } = require('./services/syncScheduler');
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    // Start background sync loop
+    startSyncScheduler();
 });

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Share2, Copy, CheckCircle, ArrowRight, UserPlus, Users } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { getApiUrl } from '../config';
 
 const ReferralPage = () => {
     const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const ReferralPage = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             const response = await axios.post(`${apiUrl}/api/referrals`, formData);
             const link = `${window.location.origin}/referral/${response.data.referralCode}`;
             setGeneratedLink(link);

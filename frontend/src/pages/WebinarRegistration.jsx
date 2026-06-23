@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getApiUrl } from '../config';
 import {
   Calendar, Clock, Video, ArrowRight, Home, Shield,
   TrendingUp, Key, ChevronDown, CheckCircle2, Users,
@@ -56,101 +57,188 @@ const CountUnit = ({ value, label }) => (
 // ─────────────────────────────────────────────
 //  Registration Form Component
 // ─────────────────────────────────────────────
-const RegistrationForm = ({ id = 'hero-form' }) => {
-  const [form, setForm]           = useState({ firstName: '', email: '', mobile: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError]           = useState('');
+//  Duplicate-confirmation modal
+// ─────────────────────────────────────────────
+const DuplicateModal = ({ firstName, onConfirm, onCancel }) => (
+  <div className="mkw-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="dup-modal-title">
+    <div className="mkw-modal">
+      <div className="mkw-modal-icon">⚠️</div>
+      <h2 id="dup-modal-title" className="mkw-modal-title">Already Registered</h2>
+      <p className="mkw-modal-body">
+        Hey <strong>{firstName}</strong>, we found an existing registration for this email or phone.
+        Would you like to re-confirm your seat anyway?
+      </p>
+      <div className="mkw-modal-actions">
+        <button className="mkw-modal-cancel" onClick={onCancel} id="dup-modal-cancel">No, Go Back</button>
+        <button className="mkw-modal-confirm" onClick={onConfirm} id="dup-modal-confirm">Yes, Re-Confirm My Seat</button>
+      </div>
+    </div>
+  </div>
+);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+// ─────────────────────────────────────────────
+//  Registration Form
+// ─────────────────────────────────────────────
+const RegistrationForm = ({ id = 'hero-form' }) => {
+  const [form, setForm]             = useState({ firstName: '', email: '', mobile: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitStage, setSubmitStage] = useState(''); // 'checking' | 'saving' | 'done'
+  const [error, setError]           = useState('');
+  const [showDuplicate, setShowDuplicate] = useState(false);
+
+  const doSubmit = async (isDuplicateConfirmed = false) => {
     setSubmitting(true);
     setError('');
+    setSubmitStage('saving');
 
     const payload = {
-      firstName: form.firstName,
-      email:     form.email,
-      phone:     form.mobile,
-      tags:      ['Webinar-9July', 'FirstHome-Webinar'],
-      source:    'Webinar Landing Page – 9 July 2026',
+      firstName:           form.firstName,
+      email:               form.email,
+      phone:               form.mobile,
+      tags:                ['Webinar-9July', 'FirstHome-Webinar'],
+      source:              'Webinar Landing Page – 9 July 2026',
+      isDuplicateConfirmed,
     };
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      await fetch(`${apiUrl}/api/webinar-register`, {
+      const apiUrl = getApiUrl();
+      const res = await fetch(`${apiUrl}/api/webinar-register`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload),
       });
-    } catch (_) {
-      // Non-blocking
+
+      const data = await res.json();
+
+      if (data.success && data.token) {
+        // Store token so WebinarConfirmed can verify session
+        sessionStorage.setItem('wbr_token', data.token);
+        sessionStorage.setItem('wbr_name', form.firstName);
+        setSubmitStage('done');
+        window.location.href = '/webinar-confirmed';
+      } else {
+        throw new Error(data.error || 'Registration could not be saved.');
+      }
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.');
+      setSubmitting(false);
+      setSubmitStage('');
     }
-    window.location.href = '/webinar-confirmed';
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSubmitStage('checking');
+    setSubmitting(true);
+
+    // ── Step 1: Duplicate pre-check ──────────────────────────────────────
+    try {
+      const apiUrl = getApiUrl();
+      const checkRes = await fetch(`${apiUrl}/api/webinar-register/check-duplicate`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: form.email, phone: form.mobile }),
+      });
+      const checkData = await checkRes.json();
+
+      if (checkData.isDuplicate) {
+        // Let user decide
+        setSubmitting(false);
+        setSubmitStage('');
+        setShowDuplicate(true);
+        return;
+      }
+    } catch (_) {
+      // If check fails, proceed optimistically
+    }
+
+    // ── Step 2: Full registration ─────────────────────────────────────────
+    await doSubmit(false);
+  };
+
+  const handleDuplicateConfirm = async () => {
+    setShowDuplicate(false);
+    await doSubmit(true);
+  };
+
+  const stageLabel = submitStage === 'checking' ? 'Checking availability…' :
+                     submitStage === 'saving'   ? 'Securing your seat…' :
+                     submitStage === 'done'     ? 'Confirmed! Redirecting…' : '';
+
   return (
-    <form onSubmit={handleSubmit} id={id} className="mkw-form">
-      <div className="mkw-input-group">
-        <label className="mkw-label">First Name</label>
-        <input
-          type="text"
-          required
-          placeholder="Your first name"
-          value={form.firstName}
-          onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-          className="mkw-input"
+    <>
+      {showDuplicate && (
+        <DuplicateModal
+          firstName={form.firstName}
+          onConfirm={handleDuplicateConfirm}
+          onCancel={() => { setShowDuplicate(false); setSubmitting(false); setSubmitStage(''); }}
         />
-      </div>
-      <div className="mkw-input-group">
-        <label className="mkw-label">Email Address</label>
-        <input
-          type="email"
-          required
-          placeholder="your@email.com"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="mkw-input"
-        />
-      </div>
-      <div className="mkw-input-group">
-        <label className="mkw-label">Mobile Number</label>
-        <input
-          type="tel"
-          required
-          placeholder="+44 7700 000000"
-          value={form.mobile}
-          onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-          className="mkw-input"
-        />
-      </div>
+      )}
+      <form onSubmit={handleSubmit} id={id} className="mkw-form">
+        <div className="mkw-input-group">
+          <label className="mkw-label">First Name</label>
+          <input
+            type="text"
+            required
+            placeholder="Your first name"
+            value={form.firstName}
+            onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+            className="mkw-input"
+          />
+        </div>
+        <div className="mkw-input-group">
+          <label className="mkw-label">Email Address</label>
+          <input
+            type="email"
+            required
+            placeholder="your@email.com"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="mkw-input"
+          />
+        </div>
+        <div className="mkw-input-group">
+          <label className="mkw-label">Mobile Number</label>
+          <input
+            type="tel"
+            required
+            placeholder="+44 7700 000000"
+            value={form.mobile}
+            onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+            className="mkw-input"
+          />
+        </div>
 
-      {error && <p className="mkw-error">{error}</p>}
+        {error && <p className="mkw-error" role="alert">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="mkw-submit-btn"
-        id="register-submit-btn"
-      >
-        {submitting ? (
-          <span className="mkw-btn-inner">
-            <svg className="mkw-spinner" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-            </svg>
-            Securing Your Seat…
-          </span>
-        ) : (
-          <span className="mkw-btn-inner">
-            Reserve My Free Seat <ArrowRight className="mkw-btn-icon" />
-          </span>
-        )}
-      </button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="mkw-submit-btn"
+          id="register-submit-btn"
+        >
+          {submitting ? (
+            <span className="mkw-btn-inner">
+              <svg className="mkw-spinner" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              </svg>
+              {stageLabel || 'Processing…'}
+            </span>
+          ) : (
+            <span className="mkw-btn-inner">
+              Reserve My Free Seat <ArrowRight className="mkw-btn-icon" />
+            </span>
+          )}
+        </button>
 
-      <div className="mkw-secure-note">
-        <Shield className="mkw-secure-icon" />
-        <span>Your information is 100% secure &amp; never shared</span>
-      </div>
-    </form>
+        <div className="mkw-secure-note">
+          <Shield className="mkw-secure-icon" />
+          <span>Your information is 100% secure &amp; never shared</span>
+        </div>
+      </form>
+    </>
   );
 };
 
@@ -736,6 +824,42 @@ export default function WebinarRegistration() {
           color: #8a97b5;
         }
         .mkw-secure-icon { width: 13px; height: 13px; color: #8a97b5; }
+
+        /* ── Duplicate modal ── */
+        .mkw-modal-overlay {
+          position: fixed; inset: 0; z-index: 9999;
+          background: rgba(11,31,77,0.55);
+          backdrop-filter: blur(6px);
+          display: flex; align-items: center; justify-content: center;
+          padding: 24px;
+        }
+        .mkw-modal {
+          background: #fff;
+          border-radius: 20px;
+          box-shadow: 0 32px 80px rgba(11,31,77,0.22);
+          padding: 40px 32px 32px;
+          max-width: 420px; width: 100%;
+          text-align: center;
+          animation: modalIn 0.25s ease-out;
+        }
+        @keyframes modalIn { from { opacity:0; transform: scale(0.9) translateY(16px); } to { opacity:1; transform: scale(1) translateY(0); } }
+        .mkw-modal-icon { font-size: 40px; margin-bottom: 16px; }
+        .mkw-modal-title { font-size: 22px; font-weight: 800; color: #0B1F4D; margin-bottom: 10px; }
+        .mkw-modal-body { font-size: 14px; color: #6b7a99; line-height: 1.6; margin-bottom: 28px; }
+        .mkw-modal-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .mkw-modal-cancel {
+          padding: 12px 22px; border-radius: 10px; border: 2px solid #edf0f7;
+          background: #fff; color: #6b7a99; font-size: 13px; font-weight: 700;
+          cursor: pointer; transition: all 0.2s;
+        }
+        .mkw-modal-cancel:hover { border-color: #0B1F4D; color: #0B1F4D; }
+        .mkw-modal-confirm {
+          padding: 12px 22px; border-radius: 10px; border: none;
+          background: linear-gradient(135deg, #0B1F4D, #1a3a7c); color: #fff;
+          font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+          box-shadow: 0 4px 16px rgba(11,31,77,0.25);
+        }
+        .mkw-modal-confirm:hover { opacity: 0.9; transform: translateY(-1px); }
 
         /* ── Form card trust badges ── */
         .mkw-form-badges {

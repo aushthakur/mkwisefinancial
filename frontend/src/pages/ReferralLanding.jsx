@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ShieldCheck, ArrowRight, MessageSquare, Phone, CheckCircle, Smartphone } from 'lucide-react';
 import logo from '../assets/logo.png';
 import { Helmet } from 'react-helmet-async';
+import { getApiUrl } from '../config';
 
 const ReferralLanding = () => {
     const { code } = useParams();
@@ -23,7 +24,7 @@ const ReferralLanding = () => {
     useEffect(() => {
         const fetchReferral = async () => {
             try {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                const apiUrl = getApiUrl();
                 const response = await axios.get(`${apiUrl}/api/referrals/${code}`);
                 setReferralData(response.data);
                 setContactForm(prev => ({
@@ -50,7 +51,7 @@ const ReferralLanding = () => {
         e.preventDefault();
         setSubmitting(true);
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             await axios.post(`${apiUrl}/api/contact`, {
                 ...contactForm,
                 serviceType: 'Referral Inquiry',

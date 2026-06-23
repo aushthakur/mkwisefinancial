@@ -1,21 +1,81 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   Calendar, Clock, Video, CheckCircle2, CalendarPlus,
-  ArrowLeft, MessageCircleQuestion, Share2
+  ArrowLeft, MessageCircleQuestion, Share2, AlertCircle, RefreshCw
 } from 'lucide-react';
 import logo from '../assets/logo.png';
 import mukeshImg from '../assets/MukeshKumar.png';
 import nileshImg from '../assets/NileshRathod.png';
 import gurpreetImg from '../assets/GurpreetGupta.png';
 import vigneshImg from '../assets/VigneshMohan.png';
+import { getApiUrl } from '../config';
 
 const googleCalendarUrl =
   'https://calendar.google.com/calendar/render?action=TEMPLATE&text=First+Home+Masterclass&dates=20260709T170000Z/20260709T180000Z&details=Your+exclusive+Zoom+link+will+be+sent+to+your+email.+Get+ready+to+learn+how+to+buy+your+first+home!&location=Online+via+Zoom';
 
 export default function WebinarConfirmed() {
+  const [authState, setAuthState] = useState('verifying'); // 'verifying' | 'authorized' | 'denied'
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('wbr_token');
+
+    if (!token) {
+      setAuthState('denied');
+      return;
+    }
+
+    // Verify token against backend
+    const apiUrl = getApiUrl();
+    fetch(`${apiUrl}/api/webinar-register/verify-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.valid) {
+          setAuthState('authorized');
+        } else {
+          sessionStorage.removeItem('wbr_token');
+          setAuthState('denied');
+        }
+      })
+      .catch(() => {
+        // If backend is unreachable but token exists, allow access optimistically
+        setAuthState('authorized');
+      });
+  }, []);
+
+  // ── Guard: verifying state ────────────────────────────────────────
+  if (authState === 'verifying') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F8FAFC', gap: 16 }}>
+        <RefreshCw size={40} style={{ color: '#0B1F4D', animation: 'spin 1s linear infinite' }} />
+        <p style={{ fontFamily: 'Inter, sans-serif', color: '#6b7a99', fontWeight: 600, fontSize: 14 }}>Verifying your registration…</p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  // ── Guard: denied state ───────────────────────────────────────────
+  if (authState === 'denied') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F8FAFC', gap: 20, padding: '24px', textAlign: 'center' }}>
+        <AlertCircle size={56} style={{ color: '#ef4444' }} />
+        <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 24, fontWeight: 800, color: '#0B1F4D', margin: 0 }}>Access Restricted</h1>
+        <p style={{ fontFamily: 'Inter, sans-serif', color: '#6b7a99', fontSize: 15, lineHeight: 1.6, maxWidth: 380, margin: 0 }}>
+          This page is only accessible after completing registration. Please register first to view your confirmation.
+        </p>
+        <a href="/webinar" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#0B1F4D', color: '#fff', padding: '13px 24px', borderRadius: 12, fontWeight: 700, fontSize: 14, textDecoration: 'none', marginTop: 8 }}>
+          ← Register for the Webinar
+        </a>
+      </div>
+    );
+  }
+
   const speakers = [
     { name: 'Mukesh Kumar',   role: 'Founder, MKWise Financial', img: mukeshImg  },
     { name: 'Nilesh Rathod',  role: 'Estate & Wills Planning Expert', img: nileshImg  },

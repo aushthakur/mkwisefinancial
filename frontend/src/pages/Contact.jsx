@@ -5,6 +5,8 @@ import { CheckCircle, ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import logo from '../assets/logo.png';
 
+import { getApiUrl } from '../config';
+
 const Contact = () => {
     const [formData, setFormData] = useState({
         firstName: '',
@@ -35,7 +37,7 @@ const Contact = () => {
         };
 
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             const response = await axios.post(`${apiUrl}/api/contact`, submissionData);
 
             if (response.status === 201) {

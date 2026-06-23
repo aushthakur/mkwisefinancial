@@ -20,6 +20,7 @@ import WebinarRegistration from './pages/WebinarRegistration';
 import WebinarConfirmed from './pages/WebinarConfirmed';
 
 import axios from 'axios';
+import { getApiUrl } from './config';
 
 const ServiceWrapper = ({ id }) => {
   const data = serviceData[id];
@@ -30,7 +31,7 @@ const ServiceWrapper = ({ id }) => {
 function App() {
   React.useEffect(() => {
     // Warm up the backend (mitigate Render's cold start)
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const apiUrl = getApiUrl();
     axios.get(apiUrl).catch(() => {
       // Ignore errors, we just want to trigger the wake-up
     });

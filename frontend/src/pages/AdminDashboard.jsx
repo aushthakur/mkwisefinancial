@@ -5,16 +5,21 @@ import {
     ChevronRight, MoreVertical, LogOut, CheckCircle2,
     Clock, Archive, RefreshCw, AlertCircle, FileText,
     Mail, Phone, MessageSquare, Zap, BarChart3, LayoutGrid,
-    Shield, Briefcase, Activity, Landmark, Share2, Copy, CheckCircle, Users
+    Shield, Briefcase, Activity, Landmark, Share2, Copy, CheckCircle, Users,
+    Video, Bell, XCircle, AlertTriangle, Repeat
 } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../config';
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('assessments'); // 'assessments', 'leads', or 'reports'
+    const [activeTab, setActiveTab] = useState('assessments'); // 'assessments', 'leads', 'referrals', 'webinar', 'reports'
     const [assessments, setAssessments] = useState([]);
     const [leads, setLeads] = useState([]);
     const [referrals, setReferrals] = useState([]);
+    const [webinarData, setWebinarData] = useState({ registrations: [], pendingGhl: [], failedRegistrations: [], duplicateRegistrations: [] });
+    const [webinarAlerts, setWebinarAlerts] = useState([]);
+    const [webinarSubTab, setWebinarSubTab] = useState('registrations');
     const [filtered, setFiltered] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
@@ -32,7 +37,7 @@ const AdminDashboard = () => {
                 return;
             }
 
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             const headers = { Authorization: `Basic ${token}` };
 
             const [assessmentsRes, leadsRes, referralsRes] = await Promise.all([
@@ -44,6 +49,16 @@ const AdminDashboard = () => {
             setAssessments(assessmentsRes.data);
             setLeads(leadsRes.data);
             setReferrals(referralsRes.data);
+
+            // Fetch webinar data
+            try {
+                const [webinarRes, alertsRes] = await Promise.all([
+                    axios.get(`${apiUrl}/api/webinar-register/admin/all`, { headers }),
+                    axios.get(`${apiUrl}/api/webinar-register/admin/alerts`, { headers }),
+                ]);
+                setWebinarData(webinarRes.data);
+                setWebinarAlerts(alertsRes.data);
+            } catch (_) {}
 
             updateFiltered(activeTab, assessmentsRes.data, leadsRes.data, referralsRes.data, searchTerm);
         } catch (err) {
@@ -67,7 +82,7 @@ const AdminDashboard = () => {
     }, [activeTab]);
 
     const updateFiltered = (tab, allAssessments, allLeads, allReferrals, term) => {
-        if (tab === 'reports') return;
+        if (tab === 'reports' || tab === 'webinar') return;
         let source;
         if (tab === 'assessments') source = allAssessments;
         else if (tab === 'leads') source = allLeads;
@@ -103,7 +118,7 @@ const AdminDashboard = () => {
     const updateStatus = async (id, status) => {
         try {
             const token = localStorage.getItem('adminToken');
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             const endpoint = activeTab === 'assessments' ? 'insurance-assessment' : 'contact';
 
             await axios.patch(`${apiUrl}/api/${endpoint}/${id}`, { status }, {
@@ -318,6 +333,16 @@ const AdminDashboard = () => {
                     >
                         <Share2 size={20} /> <span className="hidden lg:block font-black uppercase text-[10px] tracking-widest">Referral Links</span>
                     </button>
+                    <button
+                        onClick={() => setActiveTab('webinar')}
+                        className={`w-full flex items-center justify-center lg:justify-start gap-4 p-4 rounded-2xl transition-all ${activeTab === 'webinar' ? 'bg-amber-500 text-white shadow-xl shadow-amber-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                    >
+                        <Video size={20} /> 
+                        <span className="hidden lg:block font-black uppercase text-[10px] tracking-widest">Webinar Panel</span>
+                        {webinarData.pendingGhl.length > 0 && (
+                            <span className="hidden lg:flex w-5 h-5 rounded-full bg-red-500 text-white text-[9px] font-black items-center justify-center ml-auto">{webinarData.pendingGhl.length}</span>
+                        )}
+                    </button>
 
                     <div className="pt-10 mb-4 border-t border-slate-800 hidden lg:block">
                         <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-4 ml-2">Analytics</p>
@@ -344,7 +369,7 @@ const AdminDashboard = () => {
                         <div>
                             <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 block">MKWise Intelligence</span>
                             <h1 className="text-4xl lg:text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none">
-                                {activeTab === 'assessments' ? 'Insurance Vault' : activeTab === 'leads' ? 'Website Stream' : activeTab === 'referrals' ? 'Referral Network' : 'Reporting Core'}
+                                {activeTab === 'assessments' ? 'Insurance Vault' : activeTab === 'leads' ? 'Website Stream' : activeTab === 'referrals' ? 'Referral Network' : activeTab === 'webinar' ? 'Webinar Panel' : 'Reporting Core'}
                             </h1>
                             <p className="text-slate-500 font-medium text-lg mt-4 max-w-xl">
                                 {activeTab === 'assessments'
@@ -353,7 +378,9 @@ const AdminDashboard = () => {
                                         ? 'Public contact inquiries, calendar bookings, and "Get Started" questionnaires.'
                                         : activeTab === 'referrals'
                                             ? 'Track and manage partner referrals and generated secure links.'
-                                            : 'Real-time performance metrics and lead distribution analytics.'}
+                                            : activeTab === 'webinar'
+                                                ? 'Live registrations, GHL sync status, duplicates, and system alerts for the 9 July webinar.'
+                                                : 'Real-time performance metrics and lead distribution analytics.'}
                             </p>
                         </div>
                         <div className="flex items-center gap-4">
@@ -368,6 +395,138 @@ const AdminDashboard = () => {
 
                     {activeTab === 'reports' ? (
                         <ReportsView />
+                    ) : activeTab === 'webinar' ? (
+                        // ── WEBINAR PANEL ─────────────────────────────────────────────
+                        <div className="space-y-8">
+                            {/* Stats row */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                                {[
+                                    { label: 'Total Registered', value: webinarData.registrations.length, color: 'bg-blue-50 text-blue-700', icon: <Users size={20}/> },
+                                    { label: 'Pending GHL Sync', value: webinarData.pendingGhl.length, color: 'bg-amber-50 text-amber-600', icon: <Repeat size={20}/> },
+                                    { label: 'Failed Saves', value: webinarData.failedRegistrations.length, color: 'bg-red-50 text-red-600', icon: <XCircle size={20}/> },
+                                    { label: 'Duplicate Attempts', value: webinarData.duplicateRegistrations.length, color: 'bg-purple-50 text-purple-600', icon: <AlertTriangle size={20}/> },
+                                ].map((s, i) => (
+                                    <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white border border-slate-100 rounded-3xl p-7 flex items-center gap-5 shadow-sm">
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${s.color}`}>{s.icon}</div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
+                                            <p className="text-3xl font-black text-slate-900">{s.value}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Sub-tabs */}
+                            <div className="bg-white border border-slate-100 rounded-[2.5rem] overflow-hidden shadow-sm">
+                                <div className="flex overflow-x-auto border-b border-slate-50 px-6 pt-4 gap-1">
+                                    {[
+                                        { id: 'registrations', label: 'All Registrations', count: webinarData.registrations.length },
+                                        { id: 'pendingGhl',    label: 'Pending GHL Sync', count: webinarData.pendingGhl.length, alert: true },
+                                        { id: 'failed',        label: 'Failed Saves',     count: webinarData.failedRegistrations.length, alert: true },
+                                        { id: 'duplicates',    label: 'Duplicates',        count: webinarData.duplicateRegistrations.length },
+                                        { id: 'alerts',        label: 'System Alerts',    count: webinarAlerts.filter(a => !a.resolved).length, alert: true },
+                                    ].map(tab => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setWebinarSubTab(tab.id)}
+                                            className={`flex-shrink-0 flex items-center gap-2 px-5 py-3 rounded-t-xl text-[10px] font-black uppercase tracking-widest transition-all border-b-2 ${
+                                                webinarSubTab === tab.id
+                                                    ? 'border-primary text-primary bg-blue-50/50'
+                                                    : 'border-transparent text-slate-400 hover:text-slate-700'
+                                            }`}
+                                        >
+                                            {tab.label}
+                                            {tab.count > 0 && (
+                                                <span className={`px-2 py-0.5 rounded-full text-[9px] font-black ${ tab.alert && tab.count > 0 ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500' }`}>
+                                                    {tab.count}
+                                                </span>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Sub-tab content */}
+                                <div className="p-6">
+                                    {webinarSubTab === 'alerts' ? (
+                                        // ── ALERTS ──────────────────────────────────────────────────
+                                        <div className="space-y-3">
+                                            {webinarAlerts.length === 0 ? (
+                                                <div className="py-16 text-center">
+                                                    <CheckCircle2 size={40} className="mx-auto text-emerald-300 mb-4"/>
+                                                    <p className="text-[11px] font-black text-slate-300 uppercase tracking-widest">All systems operational — no alerts</p>
+                                                </div>
+                                            ) : webinarAlerts.map((alert, i) => (
+                                                <div key={alert._id || i} className={`flex items-start gap-4 p-5 rounded-2xl border ${ alert.resolved ? 'bg-slate-50 border-slate-100 opacity-50' : 'bg-red-50 border-red-100' }`}>
+                                                    <Bell size={18} className={alert.resolved ? 'text-slate-400' : 'text-red-500'} />
+                                                    <div className="flex-1">
+                                                        <p className="text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1">{alert.type}</p>
+                                                        <p className="text-xs text-slate-500">{alert.message}</p>
+                                                        <p className="text-[9px] text-slate-400 mt-2">{new Date(alert.createdAt).toLocaleString()}</p>
+                                                    </div>
+                                                    {alert.resolved && <span className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[9px] font-black uppercase">Resolved</span>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        // ── LEAD TABLE ─────────────────────────────────────────────
+                                        (() => {
+                                            const rows = webinarSubTab === 'registrations' ? webinarData.registrations
+                                                       : webinarSubTab === 'pendingGhl'    ? webinarData.pendingGhl
+                                                       : webinarSubTab === 'failed'        ? webinarData.failedRegistrations
+                                                       : webinarData.duplicateRegistrations;
+                                            return rows.length === 0 ? (
+                                                <div className="py-16 text-center">
+                                                    <Archive size={40} className="mx-auto text-slate-200 mb-4"/>
+                                                    <p className="text-[11px] font-black text-slate-300 uppercase tracking-widest">No records in this category</p>
+                                                </div>
+                                            ) : (
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-left border-collapse">
+                                                        <thead>
+                                                            <tr className="border-b border-slate-50">
+                                                                <th className="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Name</th>
+                                                                <th className="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Email</th>
+                                                                <th className="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Phone</th>
+                                                                <th className="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">GHL Status</th>
+                                                                <th className="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Retries</th>
+                                                                <th className="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-slate-50">
+                                                            <AnimatePresence mode="popLayout">
+                                                                {rows.map((lead, i) => (
+                                                                    <motion.tr key={lead._id || i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="group hover:bg-blue-50/30 transition-colors">
+                                                                        <td className="px-4 py-5">
+                                                                            <div className="flex items-center gap-3">
+                                                                                <div className="w-9 h-9 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                                                                    <User size={15}/>
+                                                                                </div>
+                                                                                <span className="font-black text-slate-900 text-sm">{lead.name}</span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td className="px-4 py-5 text-xs text-slate-600 font-mono">{lead.email}</td>
+                                                                        <td className="px-4 py-5 text-xs text-slate-600">{lead.phone}</td>
+                                                                        <td className="px-4 py-5">
+                                                                            <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                                                                                lead.ghlSyncStatus === 'Success' ? 'bg-emerald-100 text-emerald-700'
+                                                                                : lead.ghlSyncStatus === 'Failed'  ? 'bg-red-100 text-red-700'
+                                                                                : 'bg-amber-100 text-amber-700'
+                                                                            }`}>{lead.ghlSyncStatus || 'Pending'}</span>
+                                                                        </td>
+                                                                        <td className="px-4 py-5 text-xs text-slate-500 font-black">{lead.ghlRetryCount || 0}</td>
+                                                                        <td className="px-4 py-5 text-[10px] text-slate-400">{new Date(lead.createdAt || Date.now()).toLocaleDateString()}</td>
+                                                                    </motion.tr>
+                                                                ))}
+                                                            </AnimatePresence>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            );
+                                        })()
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     ) : (
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">

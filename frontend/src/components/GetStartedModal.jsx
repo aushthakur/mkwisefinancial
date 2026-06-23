@@ -7,6 +7,7 @@ import {
     Users, Briefcase, Heart, Search, Sparkles
 } from 'lucide-react';
 import axios from 'axios';
+import { getApiUrl } from '../config';
 
 const intentOptions = ['Buy a Property', 'Remortgage/Refinance', 'Invest In Property'];
 const primaryUseOptions = ['Live there', 'Rent it out'];
@@ -113,7 +114,7 @@ const GetStartedModal = ({ isOpen, onClose, initialData }) => {
         if (e) e.preventDefault();
         setLoading(true);
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiUrl = getApiUrl();
             const detailedMessage = `
 --- Get Started Multi-Step Lead ---
 Intent: ${formData.intent}
