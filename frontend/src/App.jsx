@@ -16,8 +16,6 @@ import { serviceData } from './utils/serviceData';
 import MortgageCalculator from './components/calculators/MortgageCalculator/MortgageCalculator';
 import ReferralPage from './pages/ReferralPage';
 import ReferralLanding from './pages/ReferralLanding';
-import WebinarRegistration from './pages/WebinarRegistration';
-import WebinarConfirmed from './pages/WebinarConfirmed';
 
 import axios from 'axios';
 import { getApiUrl } from './config';
@@ -46,8 +44,6 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/referral/:code" element={<ReferralLanding />} />
-        <Route path="/register-for-9thjuly" element={<WebinarRegistration />} />
-        <Route path="/webinar-confirmed" element={<WebinarConfirmed />} />
 
         {/* Global Layout Routes */}
         <Route path="/*" element={
