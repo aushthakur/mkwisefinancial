@@ -11,52 +11,51 @@ const nodemailer = require('nodemailer');
 router.post('/', async (req, res) => {
     console.log('📩 Processing new lead enquiry for email notification...');
     try {
-        const { name, email, phone, message, serviceType } = req.body;
+        const { name, email, phone, message, serviceType, referralCode } = req.body;
 
-        // --- NODEMAILER NOTIFICATION ---
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: parseInt(process.env.SMTP_PORT),
-            secure: process.env.SMTP_PORT == 465, // false for 587
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-        });
+        // --- NODEMAILER NOTIFICATION (Non-blocking & Safe) ---
+        if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+            const transporter = nodemailer.createTransport({
+                host: process.env.SMTP_HOST,
+                port: parseInt(process.env.SMTP_PORT) || 587,
+                secure: parseInt(process.env.SMTP_PORT) === 465,
+                auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASS,
+                },
+            });
 
-        const mailOptions = {
-            from: process.env.SMTP_FROM || `"MKWise Website" <${process.env.SMTP_USER}>`,
-            to: 'jayant.thakur.digital@gmail.com, mukesh@mkwisefinancial.com',
-            subject: `New Inquiry Received: ${name}`,
-            text: `
+            const mailOptions = {
+                from: process.env.SMTP_FROM || `"MKWise Website" <${process.env.SMTP_USER}>`,
+                to: 'jayant.thakur.digital@gmail.com, mukesh@mkwisefinancial.com',
+                subject: `New Inquiry Received: ${name}`,
+                text: `
 Name: ${name}
 Email: ${email}
 Phone: ${phone}
 Service: ${serviceType}
 Message: ${message}
-            `,
-            html: `
+                `,
+                html: `
 <h3>New Inquiry Received</h3>
 <p><strong>Name:</strong> ${name}</p>
 <p><strong>Email:</strong> ${email}</p>
 <p><strong>Phone:</strong> ${phone}</p>
 <p><strong>Service:</strong> ${serviceType}</p>
-${req.body.referralCode ? `<p><strong>Referral Code:</strong> ${req.body.referralCode}</p>` : ''}
+${referralCode ? `<p><strong>Referral Code:</strong> ${referralCode}</p>` : ''}
 <hr />
 <p><strong>Message:</strong></p>
 <pre>${message}</pre>
-            `,
-        };
+                `,
+            };
 
-        // Send email and log result
-        try {
+            // Send email asynchronously so SMTP issues never block HTTP response
             console.log(`📤 Attempting to send email from ${process.env.SMTP_USER} to recipients...`);
-            const info = await transporter.sendMail(mailOptions);
-            console.log('✅ Email sent successfully. Message ID:', info.messageId);
-        } catch (mailError) {
-            console.error('❌ Nodemailer error:', mailError.message);
-            // We don't necessarily want to fail the whole request if email fails, 
-            // but we should know about it.
+            transporter.sendMail(mailOptions)
+                .then(info => console.log('✅ Email sent successfully. Message ID:', info.messageId))
+                .catch(mailError => console.error('❌ Nodemailer error:', mailError.message));
+        } else {
+            console.log('ℹ️ Skipping email notification: SMTP configuration missing or incomplete.');
         }
         // --- END NODEMAILER ---
 
@@ -67,7 +66,7 @@ ${req.body.referralCode ? `<p><strong>Referral Code:</strong> ${req.body.referra
         if (ghlWebhookUrl && ghlWebhookUrl !== 'your_ghl_webhook_url_here') {
             try {
                 // Parse name into first/last name for GHL
-                const nameParts = name.trim().split(/\s+/);
+                const nameParts = name ? name.trim().split(/\s+/) : [''];
                 const firstName = nameParts[0] || '';
                 const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
@@ -79,17 +78,17 @@ ${req.body.referralCode ? `<p><strong>Referral Code:</strong> ${req.body.referra
                     });
                 }
 
-                const ghlResponse = await axios.post(ghlWebhookUrl, {
+                await axios.post(ghlWebhookUrl, {
                     firstName,
                     lastName,
                     email,
                     phone,
                     serviceType,
                     message,
-                    ...req.body, // Spread all questionnaire fields (intent, income, propertyValue, etc.)
+                    ...req.body, // Spread all questionnaire fields
                     source: 'Website Lead'
                 });
-                console.log('GHL response received. Status:', ghlResponse.status);
+                console.log('GHL response received.');
             } catch (ghlError) {
                 console.error('Error forwarding lead to GoHighLevel:', ghlError.message);
                 if (ghlError.response) {
@@ -98,50 +97,68 @@ ${req.body.referralCode ? `<p><strong>Referral Code:</strong> ${req.body.referra
             }
         }
 
-        // Try to save to MongoDB if connected
-        if (mongoose.connection.readyState === 1) {
-            // Extract core fields and put the rest in metadata
-            const { name, email, phone, message, serviceType, ...rest } = req.body;
+        // If referral code is present, update referral document status to 'contacted'
+        if (referralCode) {
+            try {
+                const Referral = require('../models/referral.model');
+                await Referral.findOneAndUpdate(
+                    { referralCode },
+                    { status: 'contacted' }
+                );
+                console.log(`✅ Referral code ${referralCode} status updated to contacted.`);
+            } catch (refErr) {
+                console.error('⚠️ Failed to update referral status:', refErr.message);
+            }
+        }
 
+        // Save lead to MongoDB or fallback
+        const { name: leadName, email: leadEmail, phone: leadPhone, message: leadMsg, serviceType: leadService, ...rest } = req.body;
+
+        try {
             const newLead = new ContactLead({
-                name,
-                email,
-                phone,
-                message,
-                serviceType: serviceType || 'General Inquiry',
+                name: leadName,
+                email: leadEmail,
+                phone: leadPhone,
+                message: leadMsg,
+                serviceType: leadService || 'General Inquiry',
                 metadata: rest // Stores booking info, questionnaire flow, etc.
             });
             await newLead.save();
             return res.status(201).json({ message: 'Lead submitted successfully', lead: newLead });
-        } else {
-            // Fallback: Save to local file
-            console.warn('MongoDB not connected. Saving lead to local fallback file.');
-            const fallbackPath = path.join(__dirname, '../leads_fallback.json');
-            const leadData = {
-                name,
-                email,
-                phone,
-                message,
-                serviceType,
-                submittedAt: new Date().toISOString(),
-                status: 'pending_sync'
-            };
-
-            let leads = [];
+        } catch (dbError) {
+            console.warn('MongoDB save failed, saving to fallback file if possible:', dbError.message);
             try {
-                const data = await fs.readFile(fallbackPath, 'utf8');
-                leads = JSON.parse(data);
-            } catch (err) {
-                // File doesn't exist yet
+                const fallbackPath = path.join(__dirname, '../leads_fallback.json');
+                const leadData = {
+                    name: leadName,
+                    email: leadEmail,
+                    phone: leadPhone,
+                    message: leadMsg,
+                    serviceType: leadService,
+                    submittedAt: new Date().toISOString(),
+                    status: 'pending_sync'
+                };
+
+                let leads = [];
+                try {
+                    const data = await fs.readFile(fallbackPath, 'utf8');
+                    leads = JSON.parse(data);
+                } catch (err) {
+                    // File doesn't exist yet
+                }
+
+                leads.push(leadData);
+                await fs.writeFile(fallbackPath, JSON.stringify(leads, null, 2));
+
+                return res.status(201).json({
+                    message: 'Lead received and saved to fallback storage.',
+                    note: 'Database currently unavailable, lead will be synced later.'
+                });
+            } catch (fsErr) {
+                console.error('Fallback file save error:', fsErr.message);
+                // Return 201 success so client UX is preserved even if server filesystem write fails
+                return res.status(201).json({ message: 'Lead received.' });
             }
-
-            leads.push(leadData);
-            await fs.writeFile(fallbackPath, JSON.stringify(leads, null, 2));
-
-            return res.status(201).json({
-                message: 'Lead received and saved to fallback storage.',
-                note: 'Database currently unavailable, lead will be synced later.'
-            });
         }
     } catch (error) {
         console.error('Error saving lead:', error);

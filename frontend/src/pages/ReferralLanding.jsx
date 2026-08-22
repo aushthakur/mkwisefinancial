@@ -20,6 +20,7 @@ const ReferralLanding = () => {
     });
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [submitError, setSubmitError] = useState('');
 
     useEffect(() => {
         const fetchReferral = async () => {
@@ -50,6 +51,7 @@ const ReferralLanding = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
+        setSubmitError('');
         try {
             const apiUrl = getApiUrl();
             await axios.post(`${apiUrl}/api/contact`, {
@@ -57,10 +59,11 @@ const ReferralLanding = () => {
                 serviceType: 'Referral Inquiry',
                 referralCode: code
             });
-            // Update referral status in background or via another endpoint if needed
             setSubmitted(true);
         } catch (err) {
-            alert('Failed to send inquiry. Please try again.');
+            console.error('Submit error:', err);
+            const msg = err.response?.data?.error || err.response?.data?.message || 'Failed to send inquiry. Please try again.';
+            setSubmitError(msg);
         } finally {
             setSubmitting(false);
         }
@@ -199,16 +202,23 @@ const ReferralLanding = () => {
                                         />
                                     </div>
                                     
-                                    <button
-                                        disabled={submitting}
-                                        className="w-full bg-blue-600 hover:bg-black text-white py-5 rounded-2xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-100 group"
-                                    >
-                                        {submitting ? 'Sending Request...' : (
-                                            <>
-                                                Book Consultation <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                                            </>
-                                        )}
-                                    </button>
+                                    {submitError && (
+                                        <div className="p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-xs font-bold">
+                                            {submitError}
+                                        </div>
+                                     )}
+                                     
+                                     <button
+                                         type="submit"
+                                         disabled={submitting}
+                                         className="w-full bg-blue-600 hover:bg-black text-white py-5 rounded-2xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-100 group disabled:opacity-50"
+                                     >
+                                         {submitting ? 'Sending Request...' : (
+                                             <>
+                                                 Book Consultation <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                             </>
+                                         )}
+                                     </button>
                                 </form>
                             </>
                         ) : (
