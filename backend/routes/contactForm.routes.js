@@ -59,25 +59,83 @@ ${referralCode ? `<p><strong>Referral Code:</strong> ${referralCode}</p>` : ''}
         }
         // --- END NODEMAILER ---
 
-        // Forward to GoHighLevel if configured
+        // --- GHL INTEGRATION (Webhook + Direct Contact API) ---
         const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
-        console.log('Checking GHL Webhook configuration:', ghlWebhookUrl ? 'Configured' : 'Not Configured');
+        const ghlAccessToken = process.env.GHL_ACCESS_TOKEN;
+        const locationId = process.env.GHL_LOCATION_ID || '9XGJdS89KjPnK9P3CiMz';
 
+        // Parse name into first/last name for GHL
+        const nameParts = name ? name.trim().split(/\s+/) : [''];
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+        // Build tags array for GHL
+        const ghlTags = ['Website-Lead'];
+        if (serviceType) {
+            ghlTags.push(serviceType.replace(/\s+/g, '-'));
+        }
+        if (referralCode) {
+            ghlTags.push('Referral', `Referral-${referralCode}`, `ReferralCode-${referralCode}`);
+        }
+
+        const ghlSource = referralCode ? `Referral Link (${referralCode})` : 'Website Lead';
+
+        // 1. Direct GHL Contact Upsert via API if token is configured
+        if (ghlAccessToken) {
+            try {
+                console.log('📤 Upserting contact directly to GHL API with tags:', ghlTags);
+                const upsertResponse = await axios.post(
+                    'https://services.leadconnectorhq.com/contacts/upsert',
+                    {
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        tags: ghlTags,
+                        locationId,
+                        source: ghlSource,
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${ghlAccessToken}`,
+                            'Version': '2021-07-28',
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+
+                const contactId = upsertResponse?.data?.contact?.id;
+                if (contactId && ghlTags.length > 0) {
+                    try {
+                        await axios.post(
+                            `https://services.leadconnectorhq.com/contacts/${contactId}/tags`,
+                            { tags: ghlTags },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${ghlAccessToken}`,
+                                    'Version': '2021-07-28',
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+                        console.log('✅ Tags applied successfully to GHL contact:', contactId);
+                    } catch (tagErr) {
+                        console.warn('⚠️ Tag application failed on GHL contact:', tagErr.message);
+                    }
+                }
+                console.log('✅ Direct GHL Contact API upsert complete.');
+            } catch (ghlApiError) {
+                console.error('❌ GHL Direct API Upsert error:', ghlApiError.message);
+                if (ghlApiError.response) {
+                    console.error('GHL API Error Response:', ghlApiError.response.data);
+                }
+            }
+        }
+
+        // 2. Forward to GHL Webhook if configured
         if (ghlWebhookUrl && ghlWebhookUrl !== 'your_ghl_webhook_url_here') {
             try {
-                // Parse name into first/last name for GHL
-                const nameParts = name ? name.trim().split(/\s+/) : [''];
-                const firstName = nameParts[0] || '';
-                const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-
-                console.log('Forwarding lead to GHL:', { firstName, lastName, email });
-                if (req.body.isBooking) {
-                    console.log('📅 Appointment Booking Received:', {
-                        date: req.body.bookingDate,
-                        time: req.body.bookingTime
-                    });
-                }
-
+                console.log('Forwarding lead to GHL Webhook:', { firstName, lastName, email, referralCode, tags: ghlTags });
                 await axios.post(ghlWebhookUrl, {
                     firstName,
                     lastName,
@@ -85,14 +143,16 @@ ${referralCode ? `<p><strong>Referral Code:</strong> ${referralCode}</p>` : ''}
                     phone,
                     serviceType,
                     message,
+                    referralCode,
+                    tags: ghlTags,
                     ...req.body, // Spread all questionnaire fields
-                    source: 'Website Lead'
+                    source: ghlSource
                 });
-                console.log('GHL response received.');
-            } catch (ghlError) {
-                console.error('Error forwarding lead to GoHighLevel:', ghlError.message);
-                if (ghlError.response) {
-                    console.error('GHL Error Response Data:', ghlError.response.data);
+                console.log('✅ GHL Webhook response received.');
+            } catch (ghlWebhookError) {
+                console.error('Error forwarding lead to GoHighLevel Webhook:', ghlWebhookError.message);
+                if (ghlWebhookError.response) {
+                    console.error('GHL Webhook Error Response:', ghlWebhookError.response.data);
                 }
             }
         }
