@@ -389,16 +389,14 @@ const AdminDashboard = () => {
                                                 : 'Real-time performance metrics and lead distribution analytics.'}
                             </p>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 flex-wrap">
                             <button onClick={fetchData} className="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-400 transition-all shadow-sm active:scale-95"><RefreshCw size={24} className={loading ? 'animate-spin' : ''} /></button>
-                            {activeTab === 'referrals' && (
-                                <button 
-                                    onClick={() => setShowLinkModal(true)} 
-                                    className="flex items-center gap-3 bg-indigo-600 text-white px-6 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-95"
-                                >
-                                    <Share2 size={18} /> Generate Employee Link
-                                </button>
-                            )}
+                            <button 
+                                onClick={() => setShowLinkModal(true)} 
+                                className="flex items-center gap-3 bg-indigo-600 text-white px-6 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-95 cursor-pointer"
+                            >
+                                <Share2 size={18} /> + Generate Employee Link
+                            </button>
                             {activeTab !== 'reports' && (
                                 <button onClick={exportToCSV} className="flex items-center gap-3 bg-slate-900 text-white px-8 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-primary transition-all shadow-2xl shadow-slate-900/10 active:scale-95 group">
                                     <Download size={18} className="group-hover:translate-y-0.5 transition-transform" /> Export CSV
