@@ -25,6 +25,12 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [selected, setSelected] = useState(null);
+    
+    // Employee Link Generator Modal state
+    const [showLinkModal, setShowLinkModal] = useState(false);
+    const [employeeForm, setEmployeeForm] = useState({ employeeName: '', customCode: '', phone: '' });
+    const [generatedEmployeeLink, setGeneratedEmployeeLink] = useState('');
+    const [generatingLink, setGeneratingLink] = useState(false);
     const navigate = useNavigate();
 
     const fetchData = async () => {
@@ -385,6 +391,14 @@ const AdminDashboard = () => {
                         </div>
                         <div className="flex items-center gap-4">
                             <button onClick={fetchData} className="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-400 transition-all shadow-sm active:scale-95"><RefreshCw size={24} className={loading ? 'animate-spin' : ''} /></button>
+                            {activeTab === 'referrals' && (
+                                <button 
+                                    onClick={() => setShowLinkModal(true)} 
+                                    className="flex items-center gap-3 bg-indigo-600 text-white px-6 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-95"
+                                >
+                                    <Share2 size={18} /> Generate Employee Link
+                                </button>
+                            )}
                             {activeTab !== 'reports' && (
                                 <button onClick={exportToCSV} className="flex items-center gap-3 bg-slate-900 text-white px-8 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-primary transition-all shadow-2xl shadow-slate-900/10 active:scale-95 group">
                                     <Download size={18} className="group-hover:translate-y-0.5 transition-transform" /> Export CSV
@@ -926,6 +940,107 @@ const AdminDashboard = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Employee Referral Link Generation Modal */}
+            {showLinkModal && (
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-[2.5rem] p-8 sm:p-10 max-w-lg w-full border border-slate-100 shadow-2xl relative">
+                        <button onClick={() => { setShowLinkModal(false); setGeneratedEmployeeLink(''); }} className="absolute top-6 right-6 text-slate-400 hover:text-slate-900 text-xl font-bold">✕</button>
+                        
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-black">
+                                <Share2 size={20} />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Generate Employee Link</h3>
+                                <p className="text-slate-400 text-xs font-medium">Creates mkwisefinancial.com/name_referral</p>
+                            </div>
+                        </div>
+
+                        {!generatedEmployeeLink ? (
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                setGeneratingLink(true);
+                                try {
+                                    const apiUrl = getApiUrl();
+                                    const res = await axios.post(`${apiUrl}/api/referrals`, {
+                                        referrerName: employeeForm.employeeName,
+                                        referrerPhone: employeeForm.phone || '',
+                                        clientName: 'General Referral',
+                                        clientPhone: '',
+                                        customCode: employeeForm.customCode || employeeForm.employeeName
+                                    });
+                                    const link = `${window.location.origin}/referral/${res.data.referralCode}`;
+                                    setGeneratedEmployeeLink(link);
+                                    fetchData();
+                                } catch (err) {
+                                    alert(err.response?.data?.message || 'Failed to generate link');
+                                } finally {
+                                    setGeneratingLink(false);
+                                }
+                            }} className="space-y-4">
+                                <div>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 px-1">Employee / Advisor Name *</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        placeholder="e.g. John Doe"
+                                        value={employeeForm.employeeName}
+                                        onChange={(e) => setEmployeeForm({ ...employeeForm, employeeName: e.target.value })}
+                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 px-1">Custom Tag / Code (Optional)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. john_doe (defaults to name)"
+                                        value={employeeForm.customCode}
+                                        onChange={(e) => setEmployeeForm({ ...employeeForm, customCode: e.target.value })}
+                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={generatingLink}
+                                    className="w-full bg-indigo-600 hover:bg-slate-900 text-white font-black py-5 rounded-2xl uppercase tracking-widest text-xs transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-2"
+                                >
+                                    {generatingLink ? 'Creating Code...' : 'Create Employee Link'}
+                                </button>
+                            </form>
+                        ) : (
+                            <div className="space-y-6 text-center py-4">
+                                <div className="p-4 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100 text-xs font-bold">
+                                    ✅ Referral Link Active & Ready!
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 break-all font-mono text-xs font-bold text-slate-800">
+                                    {generatedEmployeeLink}
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(generatedEmployeeLink);
+                                            alert('Copied link to clipboard!');
+                                        }}
+                                        className="flex-1 bg-slate-900 text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all"
+                                    >
+                                        Copy Link
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setGeneratedEmployeeLink('');
+                                            setEmployeeForm({ employeeName: '', customCode: '', phone: '' });
+                                        }}
+                                        className="bg-slate-100 text-slate-600 px-5 rounded-xl font-bold text-xs hover:bg-slate-200 transition-all"
+                                    >
+                                        Another
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 };

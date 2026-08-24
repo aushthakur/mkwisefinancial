@@ -75,7 +75,8 @@ ${referralCode ? `<p><strong>Referral Code:</strong> ${referralCode}</p>` : ''}
             ghlTags.push(serviceType.replace(/\s+/g, '-'));
         }
         if (referralCode) {
-            ghlTags.push('Referral', `Referral-${referralCode}`, `ReferralCode-${referralCode}`);
+            const cleanRefTag = String(referralCode).trim().toLowerCase();
+            ghlTags.push('Referral', cleanRefTag, `Referral-${cleanRefTag}`, `ReferralCode-${cleanRefTag}`);
         }
 
         const ghlSource = referralCode ? `Referral Link (${referralCode})` : 'Website Lead';

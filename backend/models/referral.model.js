@@ -8,28 +8,29 @@ const referralSchema = new mongoose.Schema({
     },
     referrerPhone: {
         type: String,
-        required: true,
+        default: '',
         trim: true
     },
     clientName: {
         type: String,
-        required: true,
+        default: 'General Client',
         trim: true
     },
     clientPhone: {
         type: String,
-        required: true,
+        default: '',
         trim: true
     },
     referralCode: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     },
     status: {
         type: String,
-        enum: ['pending', 'contacted', 'completed'],
-        default: 'pending'
+        enum: ['active', 'pending', 'contacted', 'completed'],
+        default: 'active'
     },
     createdAt: {
         type: Date,

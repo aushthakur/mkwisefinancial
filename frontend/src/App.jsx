@@ -44,6 +44,7 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/referral/:code" element={<ReferralLanding />} />
+        <Route path="/ref/:code" element={<ReferralLanding />} />
 
         {/* Global Layout Routes */}
         <Route path="/*" element={

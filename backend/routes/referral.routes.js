@@ -8,23 +8,46 @@ const generateCode = () => {
     return crypto.randomBytes(4).toString('hex').toUpperCase(); // 8 characters
 };
 
-// Create a new referral
+// Helper to sanitize custom referral code into URL slug
+const slugify = (text) => {
+    return text.toString().toLowerCase().trim()
+        .replace(/\s+/g, '_')           // Replace spaces with _
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '_');        // Replace multiple dashes with single _
+};
+
+// Create a new referral (Supports both client specific and employee links)
 router.post('/', async (req, res) => {
     try {
-        const { referrerName, referrerPhone, clientName, clientPhone } = req.body;
+        const { referrerName, referrerPhone, clientName, clientPhone, customCode } = req.body;
         
-        if (!referrerName || !referrerPhone || !clientName || !clientPhone) {
-            return res.status(400).json({ message: 'All fields are required' });
+        if (!referrerName) {
+            return res.status(400).json({ message: 'Referrer Name is required' });
         }
 
-        const referralCode = generateCode();
-        
+        let referralCode;
+        if (customCode && customCode.trim()) {
+            referralCode = slugify(customCode);
+            // Check if code exists
+            const existing = await Referral.findOne({ referralCode });
+            if (existing) {
+                // Append random suffix if exists
+                referralCode = `${referralCode}_${generateCode().slice(0, 4).toLowerCase()}`;
+            }
+        } else {
+            // Slugify referrer name or fallback to random hex
+            const baseSlug = slugify(referrerName);
+            const existing = await Referral.findOne({ referralCode: baseSlug });
+            referralCode = existing ? `${baseSlug}_${generateCode().slice(0, 4).toLowerCase()}` : baseSlug;
+        }
+
         const newReferral = new Referral({
             referrerName,
-            referrerPhone,
-            clientName,
-            clientPhone,
-            referralCode
+            referrerPhone: referrerPhone || '',
+            clientName: clientName || 'General Referral',
+            clientPhone: clientPhone || '',
+            referralCode,
+            status: 'active'
         });
 
         await newReferral.save();
@@ -35,12 +58,30 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Get referral by code
+// Get referral by code (case-insensitive lookup with dynamic fallback)
 router.get('/:code', async (req, res) => {
     try {
-        const referral = await Referral.findOne({ referralCode: req.params.code });
+        const reqCode = req.params.code.trim().toLowerCase();
+        let referral = await Referral.findOne({ 
+            referralCode: { $regex: new RegExp(`^${reqCode}$`, 'i') } 
+        });
+
         if (!referral) {
-            return res.status(404).json({ message: 'Referral link invalid or expired' });
+            // Fallback: Return dynamic referrer structure so employee links work dynamically
+            const formattedName = reqCode
+                .replace(/_/g, ' ')
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+
+            referral = {
+                referrerName: formattedName || reqCode,
+                referrerPhone: '',
+                clientName: 'Valued Client',
+                clientPhone: '',
+                referralCode: reqCode,
+                status: 'active',
+                isDynamic: true
+            };
         }
         res.json(referral);
     } catch (error) {
