@@ -112,24 +112,22 @@ const ReferralPage = () => {
                                     <div className="space-y-6">
                                         <div className="flex items-center gap-2 mb-2">
                                             <Users className="w-5 h-5 text-green-500" />
-                                            <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">Client Details</h2>
+                                            <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">Client / Custom Tag (Optional)</h2>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-gray-700 uppercase mb-2">Client's Full Name</label>
+                                            <label className="block text-xs font-bold text-gray-700 uppercase mb-2">Client's Full Name (Optional)</label>
                                             <input
-                                                required
                                                 type="text"
                                                 name="clientName"
                                                 value={formData.clientName}
                                                 onChange={handleChange}
                                                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-medium"
-                                                placeholder="e.g. Sarah Jones"
+                                                placeholder="e.g. Sarah Jones (leave empty for Employee link)"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-gray-700 uppercase mb-2">Client's Phone Number</label>
+                                            <label className="block text-xs font-bold text-gray-700 uppercase mb-2">Client's Phone Number (Optional)</label>
                                             <input
-                                                required
                                                 type="tel"
                                                 name="clientPhone"
                                                 value={formData.clientPhone}
