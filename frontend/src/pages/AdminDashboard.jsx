@@ -566,13 +566,21 @@ const AdminDashboard = () => {
 
                             <div className="bg-white rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.06)] border border-slate-100 overflow-hidden">
                                 <div className="p-8 lg:p-10 border-b border-slate-50 flex items-center justify-between flex-wrap gap-8 bg-slate-50/20">
-                                    <div className="relative max-w-xl w-full">
+                                    <div className="relative max-w-xl w-full flex-1">
                                         <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                                         <input placeholder={`Filter ${activeTab} by name, email or service...`} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-14 pr-8 h-16 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none font-bold placeholder:text-slate-300 transition-all shadow-inner" />
                                     </div>
                                     <div className="flex items-center gap-3">
+                                        {activeTab === 'referrals' && (
+                                            <button
+                                                onClick={() => setShowLinkModal(true)}
+                                                className="flex items-center gap-2 bg-indigo-600 hover:bg-slate-900 text-white px-6 h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg shadow-indigo-100 cursor-pointer"
+                                            >
+                                                <Share2 size={16} /> + Generate Employee Link
+                                            </button>
+                                        )}
                                         <span className="bg-primary/10 text-primary px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                            Queue: {activeTab === 'assessments' ? 'Insurance' : 'Website'}
+                                            Queue: {activeTab === 'assessments' ? 'Insurance' : activeTab === 'referrals' ? 'Referrals' : 'Website'}
                                         </span>
                                     </div>
                                 </div>
